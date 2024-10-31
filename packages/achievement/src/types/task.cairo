@@ -1,6 +1,6 @@
 // Internal imports
 
-use achievement::events::index::Task;
+use achievement::types::index::Task;
 
 // Errors
 

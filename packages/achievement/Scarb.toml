@@ -4,3 +4,6 @@ version.workspace = true
 
 [dependencies]
 dojo.workspace = true
+
+[dev-dependencies]
+dojo_cairo_test.workspace = true

@@ -1,3 +1,5 @@
+/// Models
+
 #[derive(Clone, Drop, Serde)]
 #[dojo::model]
 pub struct Game {

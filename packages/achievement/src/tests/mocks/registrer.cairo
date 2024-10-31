@@ -59,6 +59,7 @@ pub mod Registrer {
 
     // Dojo imports
 
+    use dojo::world::WorldStorage;
     use dojo::contract::{IContractDispatcher, IContractDispatcherTrait};
 
     // Internal imports
@@ -102,7 +103,7 @@ pub mod Registrer {
             self
                 .registrable
                 .register_game(
-                    self.world(),
+                    self.world_storage(),
                     world_address,
                     namespace,
                     name,
@@ -125,24 +126,30 @@ pub mod Registrer {
             self
                 .registrable
                 .update_game(
-                    self.world(), world_address, namespace, name, description, torii_url, image_uri
+                    self.world_storage(),
+                    world_address,
+                    namespace,
+                    name,
+                    description,
+                    torii_url,
+                    image_uri
                 );
         }
 
         fn publish_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registrable.publish_game(self.world(), world_address, namespace);
+            self.registrable.publish_game(self.world_storage(), world_address, namespace);
         }
 
         fn hide_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registrable.hide_game(self.world(), world_address, namespace);
+            self.registrable.hide_game(self.world_storage(), world_address, namespace);
         }
 
         fn whitelist_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registrable.whitelist_game(self.world(), world_address, namespace);
+            self.registrable.whitelist_game(self.world_storage(), world_address, namespace);
         }
 
         fn blacklist_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registrable.blacklist_game(self.world(), world_address, namespace);
+            self.registrable.blacklist_game(self.world_storage(), world_address, namespace);
         }
 
         fn register_achievement(
@@ -154,7 +161,9 @@ pub mod Registrer {
         ) {
             self
                 .registrable
-                .register_achievement(self.world(), world_address, namespace, identifier, karma);
+                .register_achievement(
+                    self.world_storage(), world_address, namespace, identifier, karma
+                );
         }
 
         fn update_achievement(
@@ -166,7 +175,9 @@ pub mod Registrer {
         ) {
             self
                 .registrable
-                .update_achievement(self.world(), world_address, namespace, identifier, karma);
+                .update_achievement(
+                    self.world_storage(), world_address, namespace, identifier, karma
+                );
         }
 
         fn publish_achievement(
@@ -174,13 +185,15 @@ pub mod Registrer {
         ) {
             self
                 .registrable
-                .publish_achievement(self.world(), world_address, namespace, identifier);
+                .publish_achievement(self.world_storage(), world_address, namespace, identifier);
         }
 
         fn hide_achievement(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.registrable.hide_achievement(self.world(), world_address, namespace, identifier);
+            self
+                .registrable
+                .hide_achievement(self.world_storage(), world_address, namespace, identifier);
         }
 
         fn whitelist_achievement(
@@ -188,7 +201,7 @@ pub mod Registrer {
         ) {
             self
                 .registrable
-                .whitelist_achievement(self.world(), world_address, namespace, identifier);
+                .whitelist_achievement(self.world_storage(), world_address, namespace, identifier);
         }
 
         fn blacklist_achievement(
@@ -196,7 +209,14 @@ pub mod Registrer {
         ) {
             self
                 .registrable
-                .blacklist_achievement(self.world(), world_address, namespace, identifier);
+                .blacklist_achievement(self.world_storage(), world_address, namespace, identifier);
+        }
+    }
+
+    #[generate_trait]
+    impl Private of PrivateTrait {
+        fn world_storage(self: @ContractState) -> WorldStorage {
+            self.world(@"namespace")
         }
     }
 }

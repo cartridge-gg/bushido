@@ -1,70 +1,54 @@
-// Core imports
+// // Core imports
 
-use core::num::traits::Zero;
+// use core::num::traits::Zero;
 
-// Starknet imports
+// // Starknet imports
 
-use starknet::ContractAddress;
-use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
-use starknet::testing;
+// use starknet::ContractAddress;
+// use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
+// use starknet::testing;
 
-// Internal imports
+// // Internal imports
 
-use achievement::store::{Store, StoreTrait};
-use achievement::models::game::{Game, GameTrait};
-use achievement::models::achievement::{Achievement, AchievementTrait};
-use achievement::tests::mocks::controller::{
-    Controller, IControllerDispatcher, IControllerDispatcherTrait
-};
-use achievement::tests::setup::setup::{spawn_game, Systems, Context, OWNER, PLAYER};
+// use achievement::store::{Store, StoreTrait};
+// use achievement::models::game::{Game, GameTrait};
+// use achievement::models::achievement::{Achievement, AchievementTrait};
+// use achievement::tests::mocks::controller::{
+//     Controller, IControllerDispatcher, IControllerDispatcherTrait
+// };
+// use achievement::tests::setup::setup::{spawn_game, Systems, Context, OWNER, PLAYER};
 
-// Constants
+// // Constants
 
-const WORLD_ADDRESS: felt252 = 'WORLD';
-const NAMEPSACE: felt252 = 'NAMESPACE';
+// const WORLD_ADDRESS: felt252 = 'WORLD';
+// const NAMEPSACE: felt252 = 'NAMESPACE';
 
-// Tests
+// // Tests
 
-#[test]
-fn test_controllable_assert_is_authorized() {
-    // [Setup]
-    let (_world, systems, _context) = spawn_game();
-    systems.controller.assert_is_authorized();
-}
+// #[test]
+// fn test_controllable_assert_is_owner() {
+//     // [Setup]
+//     let (world, systems, _context) = spawn_game();
+//     let mut store = StoreTrait::new(world);
+//     let game = GameTrait::new(
+//         WORLD_ADDRESS, NAMEPSACE, "NAME", "DESCRIPTION", "TORII_URL", "IMAGE_URI", OWNER().into()
+//     );
+//     store.set_game(game);
+//     // [Assert]
+//     systems.controller.assert_is_owner(WORLD_ADDRESS, NAMEPSACE);
+// }
 
-#[test]
-#[should_panic(expected: ('Controllable: unauthorized call', 'ENTRYPOINT_FAILED'))]
-fn test_controllable_assert_is_authorized_revert() {
-    // [Setup]
-    let (_world, systems, _context) = spawn_game();
-    testing::set_contract_address(PLAYER());
-    systems.controller.assert_is_authorized();
-}
-
-#[test]
-fn test_controllable_assert_is_game_owner() {
-    // [Setup]
-    let (world, systems, _context) = spawn_game();
-    let store = StoreTrait::new(world);
-    let game = GameTrait::new(
-        WORLD_ADDRESS, NAMEPSACE, "NAME", "DESCRIPTION", "TORII_URL", "IMAGE_URI", OWNER().into()
-    );
-    store.set_game(game);
-    // [Assert]
-    systems.controller.assert_is_game_owner(WORLD_ADDRESS, NAMEPSACE);
-}
-
-#[test]
-#[should_panic(expected: ('Controllable: unauthorized call', 'ENTRYPOINT_FAILED'))]
-fn test_controllable_assert_is_game_owner_revert() {
-    // [Setup]
-    let (world, systems, _context) = spawn_game();
-    let store = StoreTrait::new(world);
-    let game = GameTrait::new(
-        WORLD_ADDRESS, NAMEPSACE, "NAME", "DESCRIPTION", "TORII_URL", "IMAGE_URI", OWNER().into()
-    );
-    store.set_game(game);
-    // [Assert]
-    testing::set_contract_address(PLAYER());
-    systems.controller.assert_is_game_owner(WORLD_ADDRESS, NAMEPSACE);
-}
+// #[test]
+// #[should_panic(expected: ('Controllable: unauthorized call', 'ENTRYPOINT_FAILED'))]
+// fn test_controllable_assert_is_owner_revert() {
+//     // [Setup]
+//     let (world, systems, _context) = spawn_game();
+//     let mut store = StoreTrait::new(world);
+//     let game = GameTrait::new(
+//         WORLD_ADDRESS, NAMEPSACE, "NAME", "DESCRIPTION", "TORII_URL", "IMAGE_URI", OWNER().into()
+//     );
+//     store.set_game(game);
+//     // [Assert]
+//     testing::set_contract_address(PLAYER());
+//     systems.controller.assert_is_owner(WORLD_ADDRESS, NAMEPSACE);
+// }

@@ -1,5 +1,10 @@
-#[derive(Clone, Drop, Serde)]
-#[dojo::model]
+/// Events
+
+// Internal imports
+
+use achievement::types::task::Task;
+
+#[derive(Clone, Drop, Serde, Introspect, starknet::Event)]
 #[dojo::event]
 pub struct Trophy {
     #[key]
@@ -15,18 +20,7 @@ pub struct Trophy {
     data: ByteArray,
 }
 
-#[derive(Clone, Drop, Serde)]
-#[dojo::model]
-#[dojo::event]
-pub struct Task {
-    #[key]
-    id: felt252,
-    total: u32,
-    description: ByteArray,
-}
-
-#[derive(Copy, Drop, Serde)]
-#[dojo::model]
+#[derive(Copy, Drop, Serde, Introspect, starknet::Event)]
 #[dojo::event]
 pub struct Progress {
     #[key]

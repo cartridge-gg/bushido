@@ -1,22 +1,17 @@
 #[starknet::component]
 mod ControllableComponent {
-    // Core imports
-
-    use core::debug::PrintTrait;
-
     // Starknet imports
 
-    use starknet::info::{get_caller_address};
+    use starknet::info::get_caller_address;
 
     // Dojo imports
 
-    use dojo::world::{IWorldProvider, IWorldDispatcher, IWorldDispatcherTrait};
-    use dojo::contract::IContract;
+    use dojo::world::WorldStorage;
 
     // Internal imports
 
     use achievement::store::{Store, StoreTrait};
-    use achievement::models::game::{Game, GameTrait, GameAssert};
+    use achievement::models::game::Game;
 
     // Storage
 
@@ -37,27 +32,16 @@ mod ControllableComponent {
 
     #[generate_trait]
     impl InternalImpl<
-        TContractState,
-        +HasComponent<TContractState>,
-        +IWorldProvider<TContractState>,
-        +IContract<TContractState>
+        TContractState, +HasComponent<TContractState>
     > of InternalTrait<TContractState> {
-        fn assert_is_authorized(self: @ComponentState<TContractState>, world: IWorldDispatcher) {
-            let namespace = self.get_contract().namespace_hash();
-            let caller = get_caller_address();
-            let is_owner = world.is_owner(namespace, caller);
-            let is_writer = world.is_writer(namespace, caller);
-            assert(is_owner || is_writer, errors::CONTROLLABLE_UNAUTHORIZED_CALLER);
-        }
-
-        fn assert_is_game_owner(
+        fn assert_is_owner(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(self.get_contract().world());
+            let store: Store = StoreTrait::new(world);
 
             // [Return] Game owner
             let game = store.get_game(world_address, namespace);

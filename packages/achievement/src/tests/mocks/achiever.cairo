@@ -1,6 +1,6 @@
 // Internal imports
 
-use achievement::events::task::Task;
+use achievement::types::task::Task;
 
 #[starknet::interface]
 trait IAchiever<TContractState> {
@@ -28,11 +28,12 @@ pub mod Achiever {
 
     // Dojo imports
 
+    use dojo::world::WorldStorage;
     use dojo::contract::{IContractDispatcher, IContractDispatcherTrait};
 
     // Internal imports
 
-    use achievement::events::task::Task;
+    use achievement::types::task::Task;
     use achievement::components::achievable::AchievableComponent;
 
     // Local imports
@@ -75,7 +76,7 @@ pub mod Achiever {
             self
                 .achievable
                 .create(
-                    self.world(),
+                    self.world_storage(),
                     id,
                     hidden,
                     index,
@@ -90,7 +91,14 @@ pub mod Achiever {
         }
 
         fn update(self: @ContractState, player_id: felt252, task_id: felt252, count: u32,) {
-            self.achievable.update(self.world(), player_id, task_id, count);
+            self.achievable.update(self.world_storage(), player_id, task_id, count);
+        }
+    }
+
+    #[generate_trait]
+    impl Private of PrivateTrait {
+        fn world_storage(self: @ContractState) -> WorldStorage {
+            self.world(@"namespace")
         }
     }
 }

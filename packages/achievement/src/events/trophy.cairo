@@ -1,7 +1,7 @@
 // Internal imports
 
 use achievement::events::index::Trophy;
-use achievement::events::task::{Task, TaskTrait};
+use achievement::types::task::{Task, TaskTrait};
 use achievement::constants;
 
 // Errors

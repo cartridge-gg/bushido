@@ -1,11 +1,15 @@
 #[starknet::interface]
 trait IController<TContractState> {
     fn assert_is_authorized(self: @TContractState) {}
-    fn assert_is_game_owner(self: @TContractState, world_address: felt252, namespace: felt252);
+    fn assert_is_owner(self: @TContractState, world_address: felt252, namespace: felt252);
 }
 
 #[dojo::contract]
 pub mod Controller {
+    // Dojo imports
+
+    use dojo::world::WorldStorage;
+
     // Internal imports
 
     use achievement::components::controllable::ControllableComponent;
@@ -34,12 +38,15 @@ pub mod Controller {
 
     #[abi(embed_v0)]
     impl ControllerImpl of IController<ContractState> {
-        fn assert_is_authorized(self: @ContractState) {
-            self.controllable.assert_is_authorized(self.world());
+        fn assert_is_owner(self: @ContractState, world_address: felt252, namespace: felt252) {
+            self.controllable.assert_is_owner(self.world_storage(), world_address, namespace);
         }
+    }
 
-        fn assert_is_game_owner(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.controllable.assert_is_game_owner(self.world(), world_address, namespace);
+    #[generate_trait]
+    impl Private of PrivateTrait {
+        fn world_storage(self: @ContractState) -> WorldStorage {
+            self.world(@"namespace")
         }
     }
 }

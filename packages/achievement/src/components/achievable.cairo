@@ -10,11 +10,11 @@ mod AchievableComponent {
 
     // Dojo imports
 
-    use dojo::world::IWorldDispatcher;
+    use dojo::world::WorldStorage;
 
     // Internal imports
 
-    use achievement::events::task::Task;
+    use achievement::types::task::Task;
     use achievement::store::{Store, StoreTrait};
 
     // Errors
@@ -38,7 +38,7 @@ mod AchievableComponent {
     > of InternalTrait<TContractState> {
         fn create(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             id: felt252,
             hidden: bool,
             index: u8,
@@ -59,7 +59,7 @@ mod AchievableComponent {
 
         fn update(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             player_id: felt252,
             task_id: felt252,
             count: u32,

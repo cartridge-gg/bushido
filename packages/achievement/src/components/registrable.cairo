@@ -2,7 +2,7 @@
 mod RegistrableComponent {
     // Dojo imports
 
-    use dojo::world::IWorldDispatcher;
+    use dojo::world::WorldStorage;
 
     // Internal imports
 
@@ -27,7 +27,7 @@ mod RegistrableComponent {
     > of InternalTrait<TContractState> {
         fn register_game(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             name: ByteArray,
@@ -37,7 +37,7 @@ mod RegistrableComponent {
             owner: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game does not exist
             let game = store.get_game(world_address, namespace);
@@ -54,7 +54,7 @@ mod RegistrableComponent {
 
         fn update_game(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             name: ByteArray,
@@ -63,7 +63,7 @@ mod RegistrableComponent {
             image_uri: ByteArray,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -78,12 +78,12 @@ mod RegistrableComponent {
 
         fn publish_game(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -98,12 +98,12 @@ mod RegistrableComponent {
 
         fn hide_game(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -118,12 +118,12 @@ mod RegistrableComponent {
 
         fn whitelist_game(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -138,12 +138,12 @@ mod RegistrableComponent {
 
         fn blacklist_game(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -158,12 +158,12 @@ mod RegistrableComponent {
 
         fn remove_game(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -178,14 +178,14 @@ mod RegistrableComponent {
 
         fn register_achievement(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
             karma: u16,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -208,14 +208,14 @@ mod RegistrableComponent {
 
         fn update_achievement(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
             karma: u16,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -237,13 +237,13 @@ mod RegistrableComponent {
 
         fn publish_achievement(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -262,13 +262,13 @@ mod RegistrableComponent {
 
         fn hide_achievement(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -287,13 +287,13 @@ mod RegistrableComponent {
 
         fn whitelist_achievement(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -312,13 +312,13 @@ mod RegistrableComponent {
 
         fn blacklist_achievement(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -337,13 +337,13 @@ mod RegistrableComponent {
 
         fn remove_achievement(
             self: @ComponentState<TContractState>,
-            world: IWorldDispatcher,
+            world: WorldStorage,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
         ) {
             // [Setup] Datastore
-            let store: Store = StoreTrait::new(world);
+            let mut store: Store = StoreTrait::new(world);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);

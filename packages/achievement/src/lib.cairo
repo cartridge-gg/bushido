@@ -1,6 +1,11 @@
 mod constants;
 mod store;
 
+mod types {
+    mod index;
+    mod task;
+}
+
 mod models {
     mod index;
     mod game;
@@ -10,7 +15,6 @@ mod models {
 mod events {
     mod index;
     mod trophy;
-    mod task;
     mod progress;
 }
 
