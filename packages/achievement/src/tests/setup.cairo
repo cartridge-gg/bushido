@@ -63,15 +63,15 @@ mod setup {
                 TestResource::Event(events::e_Trophy::TEST_CLASS_HASH.try_into().unwrap()),
                 TestResource::Event(events::e_Progress::TEST_CLASS_HASH.try_into().unwrap()),
                 TestResource::Contract(
-                    ContractDefTrait::new(Achiever::TEST_CLASS_HASH, "achiever")
+                    ContractDefTrait::new(Achiever::TEST_CLASS_HASH, "Achiever")
                         .with_writer_of([dojo::utils::bytearray_hash(@"namespace")].span())
                 ),
                 TestResource::Contract(
-                    ContractDefTrait::new(Controller::TEST_CLASS_HASH, "controller")
+                    ContractDefTrait::new(Controller::TEST_CLASS_HASH, "Controller")
                         .with_writer_of([dojo::utils::bytearray_hash(@"namespace")].span())
                 ),
                 TestResource::Contract(
-                    ContractDefTrait::new(Registrer::TEST_CLASS_HASH, "registrer")
+                    ContractDefTrait::new(Registrer::TEST_CLASS_HASH, "Registrer")
                         .with_writer_of([dojo::utils::bytearray_hash(@"namespace")].span())
                 ),
             ].span()
@@ -79,25 +79,25 @@ mod setup {
     }
 
     #[inline]
-    fn spawn_game() { // -> (WorldStorage, Systems, Context) {
+    fn spawn_game() -> (WorldStorage, Systems, Context) {
         // [Setup] World
-        // set_contract_address(OWNER());
+        set_contract_address(OWNER());
         let namespace_def = setup_namespace();
-        let _world = spawn_test_world([namespace_def].span());
-        // // [Setup] Systems
-    // let (achiever_address, _) = world.dns(@"achiever").unwrap();
-    // let (controller_address, _) = world.dns(@"controller").unwrap();
-    // let (registrer_address, _) = world.dns(@"registrer").unwrap();
-    // let systems = Systems {
-    //     achiever: IAchieverDispatcher { contract_address: achiever_address },
-    //     controller: IControllerDispatcher { contract_address: controller_address },
-    //     registrer: IRegistrerDispatcher { contract_address: registrer_address },
-    // };
+        let world = spawn_test_world([namespace_def].span());
+        // [Setup] Systems
+        let (achiever_address, _) = world.dns(@"Achiever").unwrap();
+        let (controller_address, _) = world.dns(@"Controller").unwrap();
+        let (registrer_address, _) = world.dns(@"Registrer").unwrap();
+        let systems = Systems {
+            achiever: IAchieverDispatcher { contract_address: achiever_address },
+            controller: IControllerDispatcher { contract_address: controller_address },
+            registrer: IRegistrerDispatcher { contract_address: registrer_address },
+        };
 
-        // // [Setup] Context
-    // let context = Context { player_id: PLAYER().into() };
+        // [Setup] Context
+        let context = Context { player_id: PLAYER().into() };
 
-        // // [Return]
-    // (world, systems, context)
+        // [Return]
+        (world, systems, context)
     }
 }

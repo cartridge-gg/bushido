@@ -4,7 +4,7 @@
 
 use achievement::types::task::Task;
 
-#[derive(Clone, Drop, Serde, Introspect, starknet::Event)]
+#[derive(Clone, Drop, Serde, Introspect)]
 #[dojo::event]
 pub struct Trophy {
     #[key]
@@ -20,7 +20,7 @@ pub struct Trophy {
     data: ByteArray,
 }
 
-#[derive(Copy, Drop, Serde, Introspect, starknet::Event)]
+#[derive(Copy, Drop, Serde, Introspect)]
 #[dojo::event]
 pub struct Progress {
     #[key]
