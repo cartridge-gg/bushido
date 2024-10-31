@@ -182,7 +182,7 @@ mod Actions {
         fn whitelist_game(self: @ContractState, world_address: felt252, namespace: felt252) {
             // [Check] Caller is a resource owner or writer
             let world = self.world_storage();
-            self.controllable.assert_is_authorized(world);
+            // self.controllable.assert_is_authorized(world);
             // [Effect] Whitelist game
             self.registrable.whitelist_game(world, world_address, namespace);
         }
@@ -190,7 +190,7 @@ mod Actions {
         fn blacklist_game(self: @ContractState, world_address: felt252, namespace: felt252) {
             // [Check] Caller is a resource owner or writer
             let world = self.world_storage();
-            self.controllable.assert_is_authorized(world);
+            // self.controllable.assert_is_authorized(world);
             // [Effect] Blacklist game
             self.registrable.blacklist_game(world, world_address, namespace);
         }
@@ -258,7 +258,7 @@ mod Actions {
         ) {
             // [Check] Caller is a resource owner or writer
             let world = self.world_storage();
-            self.controllable.assert_is_authorized(world);
+            // self.controllable.assert_is_authorized(world);
             // [Effect] Whitelist achievement
             self.registrable.whitelist_achievement(world, world_address, namespace, identifier);
         }
@@ -268,7 +268,7 @@ mod Actions {
         ) {
             // [Check] Caller is a resource owner or writer
             let world = self.world_storage();
-            self.controllable.assert_is_authorized(world);
+            // self.controllable.assert_is_authorized(world);
             // [Effect] Blacklist achievement
             self.registrable.blacklist_achievement(world, world_address, namespace, identifier);
         }

@@ -12,7 +12,16 @@ telegram = "https://t.me/dojoengine"
 
 [namespace]
 default = "game_center"
-mappings = { "achievement" = "game_center" }
+mappings = { "achievement" = [
+    "m_Game",
+    "m_Achievement",
+], "game_center" = [
+    "m_Game",
+    "m_Achievement",
+] }
+
+[writers]
+"game_center" = ["game_center-Actions"]
 
 [env]
 rpc_url = "https://api.cartridge.gg/x/bushido/katana"
