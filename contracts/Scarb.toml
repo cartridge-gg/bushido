@@ -10,13 +10,13 @@ sierra-replace-ids = true
 dev = "sozo clean && sozo build --typescript && sozo migrate plan && sozo migrate apply"
 
 [dependencies]
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.1" }
 arcade_registry = { path = ".." }
 starknet = "2.8.4"
 cairo_test = "2.8.4"
 
 [dev-dependencies]
-dojo_cairo_test = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0" }
+dojo_cairo_test = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.1" }
 
 [[target.starknet-contract]]
 build-external-contracts = [
