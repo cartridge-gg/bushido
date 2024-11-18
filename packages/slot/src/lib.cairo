@@ -6,6 +6,8 @@ mod helpers {
 }
 
 mod types {
+    mod method;
+    mod role;
     mod tier;
     mod status;
 }
@@ -13,4 +15,5 @@ mod types {
 mod models {
     mod index;
     mod deployment;
+    mod service;
 }

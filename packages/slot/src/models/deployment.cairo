@@ -39,7 +39,6 @@ impl DeploymentImpl of DeploymentTrait {
         DeploymentAssert::assert_valid_tier(tier);
         DeploymentAssert::assert_valid_regions(regions);
         // [Return] Deployment
-        let time = starknet::get_block_timestamp();
         Deployment {
             id: id,
             project: project,
@@ -50,10 +49,6 @@ impl DeploymentImpl of DeploymentTrait {
             regions: regions,
             auto_upgrade: auto_upgrade,
             config: config,
-            created_at: time,
-            updated_at: time,
-            spin_down_at: Option::None,
-            spin_up_at: Option::None,
         }
     }
 }
@@ -132,10 +127,6 @@ mod tests {
         assert_eq!(deployment.regions, REGIONS);
         assert_eq!(deployment.auto_upgrade, AUTO_UPGRADE);
         assert_eq!(deployment.config, "");
-        assert_eq!(deployment.created_at, starknet::get_block_timestamp());
-        assert_eq!(deployment.updated_at, starknet::get_block_timestamp());
-        assert_eq!(deployment.spin_down_at, Option::None);
-        assert_eq!(deployment.spin_up_at, Option::None);
     }
 
     #[test]

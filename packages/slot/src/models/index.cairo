@@ -1,99 +1,61 @@
-/// Models
+//! Models
 
-// package schema
+#[derive(Clone, Drop, Serde)]
+#[dojo::model]
+pub struct Account {
+    #[key]
+    id: felt252,
+    controllers: u32,
+    name: felt252,
+    username: felt252,
+    socials: ByteArray,
+    credits: felt252,
+}
 
-// import (
-// "encoding/json"
-// "time"
+#[derive(Clone, Drop, Serde)]
+#[dojo::model]
+pub struct Team {
+    #[key]
+    id: felt252,
+    name: felt252,
+    description: ByteArray,
+}
 
-// "entgo.io/contrib/entgql"
-// "entgo.io/ent"
-// "entgo.io/ent/schema"
-// "entgo.io/ent/schema/edge"
-// "entgo.io/ent/schema/field"
-// "entgo.io/ent/schema/index"
-// "github.com/lucsky/cuid"
-// )
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
+pub struct Member {
+    #[key]
+    account_id: felt252,
+    #[key]
+    team_id: felt252,
+    role: u8,
+}
 
-// type Resources struct {
-// Memory float64 `json:"memory,omitempty"`
-// CPU    float64 `json:"cpu,omitempty"`
-// }
+#[derive(Clone, Drop, Serde)]
+#[dojo::model]
+pub struct Controller {
+    #[key]
+    account_id: felt252,
+    #[key]
+    id: felt252,
+    signers: u32,
+    address: felt252,
+    network: felt252,
+    constructor_calldata: ByteArray,
+}
 
-// type MachineSpecs struct {
-// Requests *Resources `json:"requests,omitempty"`
-// Limits   *Resources `json:"limits,omitempty"`
-// Storage  int        `json:"storage,omitempty"`
-// }
-
-// // Deployment holds the schema definition for the Deployment entity.
-// type Deployment struct {
-// ent.Schema
-// }
-
-// // Fields of the Deployment.
-// func (Deployment) Fields() []ent.Field {
-// return []ent.Field{
-// field.String("id").
-// Unique().
-// Immutable().
-// DefaultFunc(cuid.New),
-// field.String("project"),
-// field.Enum("status").
-// Values("active", "disabled").
-// Default("active"),
-// field.String("branch").Default("main").Optional(),
-// field.String("service_id"),
-// field.Enum("tier").Values(
-// "basic",
-// "common",
-// "uncommon",
-// "rare",
-// "epic",
-// "legendary",
-// "insane",
-// ),
-// field.Strings("regions"),
-// field.Bool("auto_upgrade").Default(false),
-// field.JSON("config", json.RawMessage{}).
-// Annotations(entgql.Skip()).
-// Optional(),
-// field.Time("created_at").
-// Default(time.Now).
-// Annotations(
-// entgql.OrderField("CREATED_AT"),
-// ),
-// field.Time("updated_at").
-// Default(time.Now).
-// UpdateDefault(time.Now),
-// field.Time("spin_down_at").Optional(),
-// field.Time("spin_up_at").Optional(),
-// }
-// }
-
-// // Edges of the Deployment.
-// func (Deployment) Edges() []ent.Edge {
-// return []ent.Edge{
-// edge.From("teams", Team.Type).
-// Ref("deployments").
-// Annotations(entgql.RelayConnection()),
-// edge.From("service", Service.Type).Ref("deployments").Field("service_id").Unique().Required(),
-// edge.To("events", DeploymentLog.Type),
-// }
-// }
-
-// func (Deployment) Indexes() []ent.Index {
-// return []ent.Index{
-// index.Fields("project", "service_id").Unique(),
-// }
-// }
-
-// // Annotations returns Deployment annotations.
-// func (Deployment) Annotations() []schema.Annotation {
-// return []schema.Annotation{
-// entgql.RelayConnection(),
-// }
-// }
+#[derive(Clone, Drop, Serde)]
+#[dojo::model]
+pub struct Signer {
+    #[key]
+    account_id: felt252,
+    #[key]
+    controller_id: felt252,
+    #[key]
+    id: felt252,
+    method: u8,
+    metadata: ByteArray,
+}
 
 #[derive(Clone, Drop, Serde)]
 #[dojo::model]
@@ -109,8 +71,13 @@ pub struct Deployment {
     regions: felt252,
     auto_upgrade: bool,
     config: ByteArray,
-    created_at: u64,
-    updated_at: u64,
-    spin_down_at: Option<u64>,
-    spin_up_at: Option<u64>,
+}
+
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
+pub struct Service {
+    #[key]
+    id: felt252,
+    version: felt252,
+    default_version: felt252,
 }
