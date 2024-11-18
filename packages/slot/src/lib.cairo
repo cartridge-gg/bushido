@@ -14,6 +14,8 @@ mod types {
 
 mod models {
     mod index;
+    mod account;
+    mod team;
     mod deployment;
     mod service;
 }

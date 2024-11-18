@@ -81,3 +81,16 @@ pub struct Service {
     version: felt252,
     default_version: felt252,
 }
+
+#[derive(Clone, Drop, Serde)]
+#[dojo::model]
+pub struct Game {
+    #[key]
+    id: felt252,
+    name: felt252,
+    description: ByteArray,
+    priority: u8,
+    socials: ByteArray,
+    metadata: ByteArray,
+    active: bool,
+}
