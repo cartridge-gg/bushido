@@ -16,6 +16,10 @@ mod models {
     mod index;
     mod account;
     mod team;
+    mod member;
+    mod controller;
+    mod signer;
     mod deployment;
     mod service;
+    mod game;
 }

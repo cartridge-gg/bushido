@@ -74,7 +74,7 @@ mod tests {
     #[test]
     #[should_panic(expected: 'Team: already exists')]
     fn test_deployment_revert_already_exists() {
-        let account = TeamTrait::new(IDENTIFIER, 0, 'NAME', USERNAME, "");
-        account.assert_does_not_exist();
+        let team = TeamTrait::new(IDENTIFIER, 'NAME', "");
+        team.assert_does_not_exist();
     }
 }
