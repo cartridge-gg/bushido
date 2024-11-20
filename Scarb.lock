@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "arcade_slot"
+name = "arcade_trophy"
 version = "0.0.0"
 dependencies = [
  "dojo",
@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "arcade_trophy"
+name = "controller"
 version = "0.0.0"
 dependencies = [
  "dojo",
@@ -45,3 +45,11 @@ dependencies = [
 name = "dojo_plugin"
 version = "2.8.4"
 source = "git+https://github.com/dojoengine/dojo?tag=v1.0.1#d7335e6f5c76a1dda887ec00c594c2c019b4a05f"
+
+[[package]]
+name = "provider"
+version = "0.0.0"
+dependencies = [
+ "dojo",
+ "dojo_cairo_test",
+]

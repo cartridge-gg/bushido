@@ -1,6 +1,6 @@
 // Intenral imports
 
-use arcade_slot::models::index::Team;
+use controller::models::index::Team;
 
 // Errors
 
@@ -26,13 +26,13 @@ impl TeamImpl of TeamTrait {
 #[generate_trait]
 impl TeamAssert of AssertTrait {
     #[inline]
-    fn assert_does_not_exist(self: Team) {
-        assert(self.name == 0, errors::TEAM_ALREADY_EXISTS);
+    fn assert_does_not_exist(self: @Team) {
+        assert(self.name == @0, errors::TEAM_ALREADY_EXISTS);
     }
 
     #[inline]
-    fn assert_does_exist(self: Team) {
-        assert(self.name != 0, errors::TEAM_NOT_EXIST);
+    fn assert_does_exist(self: @Team) {
+        assert(self.name != @0, errors::TEAM_NOT_EXIST);
     }
 
     #[inline]

@@ -1,6 +1,6 @@
 // Intenral imports
 
-use arcade_slot::models::index::Controller;
+use controller::models::index::Controller;
 
 // Errors
 
@@ -46,13 +46,13 @@ impl ControllerImpl of ControllerTrait {
 #[generate_trait]
 impl ControllerAssert of AssertTrait {
     #[inline]
-    fn assert_does_not_exist(self: Controller) {
-        assert(self.account_id == 0, errors::CONTROLLER_ALREADY_EXISTS);
+    fn assert_does_not_exist(self: @Controller) {
+        assert(self.account_id == @0, errors::CONTROLLER_ALREADY_EXISTS);
     }
 
     #[inline]
-    fn assert_does_exist(self: Controller) {
-        assert(self.account_id != 0, errors::CONTROLLER_NOT_EXIST);
+    fn assert_does_exist(self: @Controller) {
+        assert(self.account_id != @0, errors::CONTROLLER_NOT_EXIST);
     }
 
     #[inline]

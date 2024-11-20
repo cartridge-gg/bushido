@@ -1,7 +1,8 @@
 // Intenral imports
 
-use arcade_slot::models::index::Member;
-use arcade_slot::types::role::Role;
+use controller::models::index::Member;
+use controller::types::role::Role;
+
 // Errors
 
 pub mod errors {
@@ -28,13 +29,13 @@ impl MemberImpl of MemberTrait {
 #[generate_trait]
 impl MemberAssert of AssertTrait {
     #[inline]
-    fn assert_does_not_exist(self: Member) {
-        assert(self.role == Role::None.into(), errors::MEMBER_ALREADY_EXISTS);
+    fn assert_does_not_exist(self: @Member) {
+        assert(self.role == @Role::None.into(), errors::MEMBER_ALREADY_EXISTS);
     }
 
     #[inline]
-    fn assert_does_exist(self: Member) {
-        assert(self.role != Role::None.into(), errors::MEMBER_NOT_EXIST);
+    fn assert_does_exist(self: @Member) {
+        assert(self.role != @Role::None.into(), errors::MEMBER_NOT_EXIST);
     }
 
     #[inline]

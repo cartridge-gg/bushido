@@ -1,6 +1,6 @@
 // Intenral imports
 
-use arcade_slot::models::index::Account;
+use controller::models::index::Account;
 
 // Errors
 
@@ -35,13 +35,13 @@ impl AccountImpl of AccountTrait {
 #[generate_trait]
 impl AccountAssert of AssertTrait {
     #[inline]
-    fn assert_does_not_exist(self: Account) {
-        assert(self.name == 0, errors::ACCOUNT_ALREADY_EXISTS);
+    fn assert_does_not_exist(self: @Account) {
+        assert(self.name == @0, errors::ACCOUNT_ALREADY_EXISTS);
     }
 
     #[inline]
-    fn assert_does_exist(self: Account) {
-        assert(self.name != 0, errors::ACCOUNT_NOT_EXIST);
+    fn assert_does_exist(self: @Account) {
+        assert(self.name != @0, errors::ACCOUNT_NOT_EXIST);
     }
 
     #[inline]

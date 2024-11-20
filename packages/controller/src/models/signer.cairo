@@ -1,7 +1,7 @@
 // Intenral imports
 
-use arcade_slot::models::index::Signer;
-use arcade_slot::types::method::Method;
+use controller::models::index::Signer;
+use controller::types::method::Method;
 
 // Errors
 
@@ -19,23 +19,17 @@ pub mod errors {
 impl SignerImpl of SignerTrait {
     #[inline]
     fn new(
-        account_id: felt252,
-        controller_id: felt252,
-        id: felt252,
-        method: Method,
-        metadata: ByteArray,
+        account_id: felt252, controller_id: felt252, method: Method, metadata: ByteArray,
     ) -> Signer {
         // [Check] Inputs
         SignerAssert::assert_valid_account_id(account_id);
         SignerAssert::assert_valid_controller_id(controller_id);
-        SignerAssert::assert_valid_identifier(id);
         SignerAssert::assert_valid_method(method);
 
         // [Return] Signer
         Signer {
             account_id: account_id,
             controller_id: controller_id,
-            id: id,
             method: method.into(),
             metadata: metadata,
         }
@@ -45,18 +39,13 @@ impl SignerImpl of SignerTrait {
 #[generate_trait]
 impl SignerAssert of AssertTrait {
     #[inline]
-    fn assert_does_not_exist(self: Signer) {
-        assert(self.account_id == 0, errors::SIGNER_ALREADY_EXISTS);
+    fn assert_does_not_exist(self: @Signer) {
+        assert(self.account_id == @0, errors::SIGNER_ALREADY_EXISTS);
     }
 
     #[inline]
-    fn assert_does_exist(self: Signer) {
-        assert(self.account_id != 0, errors::SIGNER_NOT_EXIST);
-    }
-
-    #[inline]
-    fn assert_valid_identifier(id: felt252) {
-        assert(id != 0, errors::SIGNER_INVALID_IDENTIFIER);
+    fn assert_does_exist(self: @Signer) {
+        assert(self.account_id != @0, errors::SIGNER_NOT_EXIST);
     }
 
     #[inline]
@@ -83,15 +72,13 @@ mod tests {
 
     // Constants
 
-    const IDENTIFIER: felt252 = 'IDENTIFIER';
     const ACCOUNT_ID: felt252 = 'ACCOUNT_ID';
     const CONTROLLER_ID: felt252 = 'CONTROLLER_ID';
     const METHOD: Method = Method::StarknetAccount;
 
     #[test]
     fn test_deployment_new() {
-        let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, IDENTIFIER, METHOD, "");
-        assert_eq!(signer.id, IDENTIFIER);
+        let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, METHOD, "");
         assert_eq!(signer.account_id, ACCOUNT_ID);
         assert_eq!(signer.controller_id, CONTROLLER_ID);
         assert_eq!(signer.method, METHOD.into());
@@ -100,38 +87,32 @@ mod tests {
 
     #[test]
     fn test_deployment_assert_does_exist() {
-        let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, IDENTIFIER, METHOD, "");
+        let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, METHOD, "");
         signer.assert_does_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Signer: already exists')]
     fn test_deployment_revert_already_exists() {
-        let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, IDENTIFIER, METHOD, "");
+        let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, METHOD, "");
         signer.assert_does_not_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Signer: invalid account id')]
     fn test_deployment_revert_invalid_account_id() {
-        SignerTrait::new(0, CONTROLLER_ID, IDENTIFIER, METHOD, "");
+        SignerTrait::new(0, CONTROLLER_ID, METHOD, "");
     }
 
     #[test]
     #[should_panic(expected: 'Signer: invalid controller id')]
     fn test_deployment_revert_invalid_controller_id() {
-        SignerTrait::new(ACCOUNT_ID, 0, IDENTIFIER, METHOD, "");
-    }
-
-    #[test]
-    #[should_panic(expected: 'Signer: invalid identifier')]
-    fn test_deployment_revert_invalid_identifier() {
-        SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, 0, METHOD, "");
+        SignerTrait::new(ACCOUNT_ID, 0, METHOD, "");
     }
 
     #[test]
     #[should_panic(expected: 'Signer: invalid method')]
     fn test_deployment_revert_invalid_method() {
-        SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, IDENTIFIER, Method::None, "");
+        SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, Method::None, "");
     }
 }

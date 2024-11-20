@@ -5,9 +5,16 @@ mod helpers {
     mod json;
 }
 
+mod elements {
+    mod services {
+        mod interface;
+        mod katana;
+        mod torii;
+        mod saya;
+    }
+}
+
 mod types {
-    mod method;
-    mod role;
     mod tier;
     mod socials;
     mod service;
@@ -17,12 +24,10 @@ mod types {
 
 mod models {
     mod index;
-    mod account;
-    mod team;
-    mod member;
-    mod controller;
-    mod signer;
     mod deployment;
-    mod service;
-    mod game;
+    mod factory;
+}
+
+mod components {
+    mod deployable;
 }

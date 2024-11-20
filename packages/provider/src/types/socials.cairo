@@ -1,6 +1,6 @@
 // Internal imports
 
-use arcade_slot::helpers::json::{JsonifiableString, JsonifiableTrait};
+use provider::helpers::json::{JsonifiableString, JsonifiableTrait};
 
 #[derive(Clone, Drop)]
 pub struct Socials {
@@ -12,6 +12,45 @@ pub struct Socials {
 }
 
 // Implementations
+
+#[generate_trait]
+pub impl SocialsImpl of SocialsTrait {
+    fn new(
+        discord: Option<ByteArray>,
+        telegram: Option<ByteArray>,
+        twitter: Option<ByteArray>,
+        youtube: Option<ByteArray>,
+        website: Option<ByteArray>
+    ) -> Socials {
+        let discord = match discord {
+            Option::Some(discord) => discord,
+            Option::None => "",
+        };
+        let telegram = match telegram {
+            Option::Some(telegram) => telegram,
+            Option::None => "",
+        };
+        let twitter = match twitter {
+            Option::Some(twitter) => twitter,
+            Option::None => "",
+        };
+        let youtube = match youtube {
+            Option::Some(youtube) => youtube,
+            Option::None => "",
+        };
+        let website = match website {
+            Option::Some(website) => website,
+            Option::None => "",
+        };
+        Socials {
+            discord: discord,
+            telegram: telegram,
+            twitter: twitter,
+            youtube: youtube,
+            website: website
+        }
+    }
+}
 
 pub impl SocialsJsonifiable of JsonifiableTrait<Socials> {
     fn jsonify(self: Socials) -> ByteArray {

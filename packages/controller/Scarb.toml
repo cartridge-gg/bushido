@@ -1,5 +1,5 @@
 [package]
-name = "arcade_slot"
+name = "controller"
 version.workspace = true
 
 [dependencies]

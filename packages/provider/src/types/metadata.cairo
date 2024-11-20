@@ -1,6 +1,6 @@
 // Internal imports
 
-use arcade_slot::helpers::json::{JsonifiableString, JsonifiableTrait};
+use provider::helpers::json::{JsonifiableString, JsonifiableTrait};
 
 // Constants
 
@@ -16,6 +16,41 @@ pub struct Metadata {
 }
 
 // Implementations
+
+#[generate_trait]
+pub impl MetadataImpl of MetadataTrait {
+    fn new(
+        color: Option<felt252>,
+        name: Option<ByteArray>,
+        description: Option<ByteArray>,
+        image: Option<ByteArray>,
+        banner: Option<ByteArray>
+    ) -> Metadata {
+        let color = match color {
+            Option::Some(color) => color,
+            Option::None => 0,
+        };
+        let name = match name {
+            Option::Some(name) => name,
+            Option::None => "",
+        };
+        let description = match description {
+            Option::Some(description) => description,
+            Option::None => "",
+        };
+        let image = match image {
+            Option::Some(image) => image,
+            Option::None => "",
+        };
+        let banner = match banner {
+            Option::Some(banner) => banner,
+            Option::None => "",
+        };
+        Metadata {
+            color: color, name: name, description: description, image: image, banner: banner
+        }
+    }
+}
 
 pub impl MetadataJsonifiable of JsonifiableTrait<Metadata> {
     fn jsonify(self: Metadata) -> ByteArray {
