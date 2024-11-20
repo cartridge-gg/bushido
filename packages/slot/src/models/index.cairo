@@ -66,7 +66,7 @@ pub struct Deployment {
     project: felt252,
     status: u8,
     branch: Option<felt252>,
-    service: felt252,
+    service: u8,
     tier: u8,
     regions: felt252,
     auto_upgrade: bool,
