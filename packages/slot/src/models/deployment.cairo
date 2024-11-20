@@ -1,6 +1,7 @@
 // Intenral imports
 
 use arcade_slot::models::index::Deployment;
+use arcade_slot::types::service::Service;
 use arcade_slot::types::status::Status;
 use arcade_slot::types::tier::Tier;
 
@@ -12,7 +13,7 @@ pub mod errors {
     pub const DEPLOYMENT_INVALID_IDENTIFIER: felt252 = 'Deployment: invalid identifier';
     pub const DEPLOYMENT_INVALID_PROJECT: felt252 = 'Deployment: invalid project';
     pub const DEPLOYMENT_INVALID_STATUS: felt252 = 'Deployment: invalid status';
-    pub const DEPLOYMENT_INVALID_SERVICE_ID: felt252 = 'Deployment: invalid service id';
+    pub const DEPLOYMENT_INVALID_SERVICE: felt252 = 'Deployment: invalid service';
     pub const DEPLOYMENT_INVALID_TIER: felt252 = 'Deployment: invalid tier';
     pub const DEPLOYMENT_INVALID_REGIONS: felt252 = 'Deployment: invalid regions';
 }
@@ -25,7 +26,7 @@ impl DeploymentImpl of DeploymentTrait {
         project: felt252,
         status: Status,
         branch: Option<felt252>,
-        service_id: felt252,
+        service: Service,
         tier: Tier,
         regions: felt252,
         auto_upgrade: bool,
@@ -35,7 +36,7 @@ impl DeploymentImpl of DeploymentTrait {
         DeploymentAssert::assert_valid_identifier(id);
         DeploymentAssert::assert_valid_project(project);
         DeploymentAssert::assert_valid_status(status);
-        DeploymentAssert::assert_valid_service_id(service_id);
+        DeploymentAssert::assert_valid_service(service);
         DeploymentAssert::assert_valid_tier(tier);
         DeploymentAssert::assert_valid_regions(regions);
         // [Return] Deployment
@@ -44,7 +45,7 @@ impl DeploymentImpl of DeploymentTrait {
             project: project,
             status: status.into(),
             branch: branch,
-            service_id: service_id,
+            service: service.into(),
             tier: tier.into(),
             regions: regions,
             auto_upgrade: auto_upgrade,
@@ -81,8 +82,8 @@ impl DeploymentAssert of AssertTrait {
     }
 
     #[inline]
-    fn assert_valid_service_id(service_id: felt252) {
-        assert(service_id != 0, errors::DEPLOYMENT_INVALID_SERVICE_ID);
+    fn assert_valid_service(service: Service) {
+        assert(service != Service::None, errors::DEPLOYMENT_INVALID_SERVICE);
     }
 
     #[inline]
@@ -100,7 +101,7 @@ impl DeploymentAssert of AssertTrait {
 mod tests {
     // Local imports
 
-    use super::{Deployment, DeploymentTrait, DeploymentAssert, Status, Tier};
+    use super::{Deployment, DeploymentTrait, DeploymentAssert, Service, Status, Tier};
 
     // Constants
 
@@ -108,7 +109,7 @@ mod tests {
     const PROJECT: felt252 = 'PROJECT';
     const STATUS: Status = Status::Active;
     const BRANCH: Option<felt252> = Option::None;
-    const SERVICE_ID: felt252 = 'SERVICE_ID';
+    const SERVICE: Service = Service::Katana;
     const TIER: Tier = Tier::Basic;
     const REGIONS: felt252 = 'REGIONS';
     const AUTO_UPGRADE: bool = true;
@@ -116,13 +117,13 @@ mod tests {
     #[test]
     fn test_deployment_new() {
         let deployment = DeploymentTrait::new(
-            IDENTIFIER, PROJECT, STATUS, BRANCH, SERVICE_ID, TIER, REGIONS, AUTO_UPGRADE, ""
+            IDENTIFIER, PROJECT, STATUS, BRANCH, SERVICE, TIER, REGIONS, AUTO_UPGRADE, ""
         );
         assert_eq!(deployment.id, IDENTIFIER);
         assert_eq!(deployment.project, PROJECT);
         assert_eq!(deployment.status, STATUS.into());
         assert_eq!(deployment.branch, BRANCH);
-        assert_eq!(deployment.service_id, SERVICE_ID);
+        assert_eq!(deployment.service, SERVICE.into());
         assert_eq!(deployment.tier, TIER.into());
         assert_eq!(deployment.regions, REGIONS);
         assert_eq!(deployment.auto_upgrade, AUTO_UPGRADE);
@@ -132,7 +133,7 @@ mod tests {
     #[test]
     fn test_deployment_assert_does_exist() {
         let deployment = DeploymentTrait::new(
-            IDENTIFIER, PROJECT, STATUS, BRANCH, SERVICE_ID, TIER, REGIONS, AUTO_UPGRADE, ""
+            IDENTIFIER, PROJECT, STATUS, BRANCH, SERVICE, TIER, REGIONS, AUTO_UPGRADE, ""
         );
         deployment.assert_does_exist();
     }
@@ -141,7 +142,7 @@ mod tests {
     #[should_panic(expected: 'Deployment: already exists')]
     fn test_deployment_revert_already_exists() {
         let deployment = DeploymentTrait::new(
-            IDENTIFIER, PROJECT, STATUS, BRANCH, SERVICE_ID, TIER, REGIONS, AUTO_UPGRADE, ""
+            IDENTIFIER, PROJECT, STATUS, BRANCH, SERVICE, TIER, REGIONS, AUTO_UPGRADE, ""
         );
         deployment.assert_does_not_exist();
     }

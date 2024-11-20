@@ -15,21 +15,13 @@ pub mod errors {
 #[generate_trait]
 impl GameImpl of GameTrait {
     #[inline]
-    fn new(
-        id: felt252, name: felt252, description: ByteArray, socials: ByteArray, metadata: ByteArray,
-    ) -> Game {
+    fn new(id: felt252, name: felt252, socials: ByteArray, metadata: ByteArray,) -> Game {
         // [Check] Inputs
         GameAssert::assert_valid_identifier(id);
         GameAssert::assert_valid_name(name);
         // [Return] Game
         Game {
-            id: id,
-            name: name,
-            description: description,
-            priority: 0,
-            socials: socials,
-            metadata: metadata,
-            active: true,
+            id: id, name: name, priority: 0, socials: socials, metadata: metadata, active: true,
         }
     }
 }
@@ -70,10 +62,9 @@ mod tests {
 
     #[test]
     fn test_service_new() {
-        let service = GameTrait::new(IDENTIFIER, NAME, "", "", "");
+        let service = GameTrait::new(IDENTIFIER, NAME, "", "");
         assert_eq!(service.id, IDENTIFIER);
         assert_eq!(service.name, NAME);
-        assert_eq!(service.description, "");
         assert_eq!(service.socials, "");
         assert_eq!(service.metadata, "");
         assert_eq!(service.active, true);
@@ -81,20 +72,20 @@ mod tests {
 
     #[test]
     fn test_service_assert_does_exist() {
-        let service = GameTrait::new(IDENTIFIER, NAME, "", "", "");
+        let service = GameTrait::new(IDENTIFIER, NAME, "", "");
         service.assert_does_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Game: already exists')]
     fn test_service_revert_already_exists() {
-        let service = GameTrait::new(IDENTIFIER, NAME, "", "", "");
+        let service = GameTrait::new(IDENTIFIER, NAME, "", "");
         service.assert_does_not_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Game: invalid name')]
     fn test_service_revert_invalid_name() {
-        GameTrait::new(IDENTIFIER, 0, "", "", "");
+        GameTrait::new(IDENTIFIER, 0, "", "");
     }
 }

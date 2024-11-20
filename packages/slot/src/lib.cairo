@@ -9,7 +9,10 @@ mod types {
     mod method;
     mod role;
     mod tier;
+    mod socials;
+    mod service;
     mod status;
+    mod metadata;
 }
 
 mod models {

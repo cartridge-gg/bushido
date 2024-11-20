@@ -1,31 +1,31 @@
 //! JSON helper functions
 
-pub trait JsonableTrait<T> {
+pub trait JsonifiableTrait<T> {
     fn jsonify(self: T) -> ByteArray;
 }
 
-pub impl Jsonable<T, +Drop<T>, +core::fmt::Display<T>> of JsonableTrait<T> {
+pub impl Jsonifiable<T, +Drop<T>, +core::fmt::Display<T>> of JsonifiableTrait<T> {
     fn jsonify(self: T) -> ByteArray {
         format!("{}", self)
     }
 }
 
 #[generate_trait]
-pub impl JsonableSimple of JsonableSimpleTrait {
+pub impl JsonifiableSimple of JsonifiableSimpleTrait {
     fn jsonify(name: ByteArray, value: ByteArray) -> ByteArray {
         format!("\"{}\":{}", name, value)
     }
 }
 
 #[generate_trait]
-pub impl JsonableString of JsonableStringTrait {
+pub impl JsonifiableString of JsonifiableStringTrait {
     fn jsonify(name: ByteArray, value: ByteArray) -> ByteArray {
         format!("\"{}\":\"{}\"", name, value)
     }
 }
 
 #[generate_trait]
-pub impl JsonableArray<T, +JsonableTrait<T>, +Drop<T>> of JsonableArrayTrait<T> {
+pub impl JsonifiableArray<T, +JsonifiableTrait<T>, +Drop<T>> of JsonifiableArrayTrait<T> {
     fn jsonify(name: ByteArray, mut value: Array<T>) -> ByteArray {
         let mut string = "[";
         let mut index: u32 = 0;
@@ -36,7 +36,7 @@ pub impl JsonableArray<T, +JsonableTrait<T>, +Drop<T>> of JsonableArrayTrait<T> 
             string += item.jsonify();
             index += 1;
         };
-        JsonableSimple::jsonify(name, string + "]")
+        JsonifiableSimple::jsonify(name, string + "]")
     }
 }
 
@@ -44,7 +44,9 @@ pub impl JsonableArray<T, +JsonableTrait<T>, +Drop<T>> of JsonableArrayTrait<T> 
 mod tests {
     // Local imports
 
-    use super::{Jsonable, JsonableSimple, JsonableString, JsonableArray, JsonableTrait};
+    use super::{
+        Jsonifiable, JsonifiableSimple, JsonifiableString, JsonifiableArray, JsonifiableTrait
+    };
 
     #[derive(Drop)]
     struct BooleanObject {
@@ -77,48 +79,49 @@ mod tests {
         object: IntegerObject,
     }
 
-    pub impl IntegerObjectJsonable of JsonableTrait<IntegerObject> {
+    pub impl IntegerObjectJsonifiable of JsonifiableTrait<IntegerObject> {
         fn jsonify(self: IntegerObject) -> ByteArray {
             let mut string = "{";
-            string += JsonableSimple::jsonify("value", format!("{}", self.value));
+            string += JsonifiableSimple::jsonify("value", format!("{}", self.value));
             string + "}"
         }
     }
 
-    pub impl BooleanObjectJsonable of JsonableTrait<BooleanObject> {
+    pub impl BooleanObjectJsonifiable of JsonifiableTrait<BooleanObject> {
         fn jsonify(self: BooleanObject) -> ByteArray {
             let mut string = "{";
-            string += JsonableSimple::jsonify("value", format!("{}", self.value));
+            string += JsonifiableSimple::jsonify("value", format!("{}", self.value));
             string + "}"
         }
     }
 
-    pub impl FeltObjectJsonable of JsonableTrait<FeltObject> {
+    pub impl FeltObjectJsonifiable of JsonifiableTrait<FeltObject> {
         fn jsonify(self: FeltObject) -> ByteArray {
             let mut string = "{";
-            string += JsonableSimple::jsonify("value", format!("{}", self.value));
+            string += JsonifiableSimple::jsonify("value", format!("{}", self.value));
             string + "}"
         }
     }
 
-    pub impl ByteArrayObjectJsonable of JsonableTrait<ByteArrayObject> {
+    pub impl ByteArrayObjectJsonifiable of JsonifiableTrait<ByteArrayObject> {
         fn jsonify(self: ByteArrayObject) -> ByteArray {
             let mut string = "{";
-            string += JsonableString::jsonify("value", format!("{}", self.value));
+            string += JsonifiableString::jsonify("value", format!("{}", self.value));
             string + "}"
         }
     }
 
-    pub impl ComplexJsonable of JsonableTrait<Complex> {
+    pub impl ComplexJsonifiable of JsonifiableTrait<Complex> {
         fn jsonify(self: Complex) -> ByteArray {
             let mut string = "{";
-            string += JsonableSimple::jsonify("boolean", format!("{}", self.boolean));
-            string += "," + JsonableSimple::jsonify("integer", format!("{}", self.integer));
-            string += "," + JsonableSimple::jsonify("felt", format!("{}", self.felt));
-            string += "," + JsonableString::jsonify("byte_array", format!("{}", self.byte_array));
-            string += "," + JsonableArray::jsonify("array", self.array);
-            string += "," + JsonableArray::jsonify("object_array", self.object_array);
-            string += "," + JsonableSimple::jsonify("object", self.object.jsonify());
+            string += JsonifiableSimple::jsonify("boolean", format!("{}", self.boolean));
+            string += "," + JsonifiableSimple::jsonify("integer", format!("{}", self.integer));
+            string += "," + JsonifiableSimple::jsonify("felt", format!("{}", self.felt));
+            string += ","
+                + JsonifiableString::jsonify("byte_array", format!("{}", self.byte_array));
+            string += "," + JsonifiableArray::jsonify("array", self.array);
+            string += "," + JsonifiableArray::jsonify("object_array", self.object_array);
+            string += "," + JsonifiableSimple::jsonify("object", self.object.jsonify());
             string + "}"
         }
     }

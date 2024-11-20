@@ -66,7 +66,7 @@ pub struct Deployment {
     project: felt252,
     status: u8,
     branch: Option<felt252>,
-    service_id: felt252,
+    service: felt252,
     tier: u8,
     regions: felt252,
     auto_upgrade: bool,
@@ -88,7 +88,6 @@ pub struct Game {
     #[key]
     id: felt252,
     name: felt252,
-    description: ByteArray,
     priority: u8,
     socials: ByteArray,
     metadata: ByteArray,
