@@ -2,14 +2,6 @@
 version = 1
 
 [[package]]
-name = "arcade_registry"
-version = "0.0.0"
-dependencies = [
- "dojo",
- "dojo_cairo_test",
-]
-
-[[package]]
 name = "arcade_trophy"
 version = "0.0.0"
 dependencies = [
@@ -48,6 +40,14 @@ source = "git+https://github.com/dojoengine/dojo?tag=v1.0.1#d7335e6f5c76a1dda887
 
 [[package]]
 name = "provider"
+version = "0.0.0"
+dependencies = [
+ "dojo",
+ "dojo_cairo_test",
+]
+
+[[package]]
+name = "registry"
 version = "0.0.0"
 dependencies = [
  "dojo",

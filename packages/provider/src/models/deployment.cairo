@@ -15,7 +15,7 @@ pub mod errors {
     pub const DEPLOYMENT_INVALID_OWNER: felt252 = 'Deployment: invalid owner';
     pub const DEPLOYMENT_INVALID_STATUS: felt252 = 'Deployment: invalid status';
     pub const DEPLOYMENT_INVALID_TIER: felt252 = 'Deployment: invalid tier';
-    pub const DEPLOYMENT_NOT_OWNER: felt252 = 'Deployment: not owner';
+    pub const DEPLOYMENT_NOT_OWNER: felt252 = 'Deployment: caller is not owner';
 }
 
 #[generate_trait]
@@ -84,8 +84,8 @@ impl DeploymentAssert of AssertTrait {
     }
 
     #[inline]
-    fn assert_is_owner(self: @Deployment, owner: felt252) {
-        assert(@owner == self.owner, errors::DEPLOYMENT_NOT_OWNER);
+    fn assert_is_owner(self: @Deployment, caller: felt252) {
+        assert(@caller == self.owner, errors::DEPLOYMENT_NOT_OWNER);
     }
 }
 
@@ -133,7 +133,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected: 'Deployment: not owner')]
+    #[should_panic(expected: 'Deployment: caller is not owner')]
     fn test_deployment_revert_not_owner() {
         let deployment = DeploymentTrait::new(SERVICE, PROJECT, OWNER, TIER, "");
         deployment.assert_is_owner(NOT_OWNER);

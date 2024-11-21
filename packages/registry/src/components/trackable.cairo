@@ -1,14 +1,16 @@
 #[starknet::component]
-mod RegistrableComponent {
+mod TrackableComponent {
     // Dojo imports
 
     use dojo::world::WorldStorage;
 
     // Internal imports
 
-    use arcade_registry::store::{Store, StoreTrait};
-    use arcade_registry::models::game::{Game, GameTrait, GameAssert};
-    use arcade_registry::models::achievement::{Achievement, AchievementTrait, AchievementAssert};
+    use registry::store::{Store, StoreTrait};
+    use registry::models::access::{Access, AccessTrait, AccessAssert};
+    use registry::models::achievement::{Achievement, AchievementTrait, AchievementAssert};
+    use registry::models::game::{Game, GameTrait, GameAssert};
+    use registry::types::role::Role;
 
     // Storage
 
@@ -25,158 +27,7 @@ mod RegistrableComponent {
     impl InternalImpl<
         TContractState, +HasComponent<TContractState>
     > of InternalTrait<TContractState> {
-        fn register_game(
-            self: @ComponentState<TContractState>,
-            world: WorldStorage,
-            world_address: felt252,
-            namespace: felt252,
-            name: ByteArray,
-            description: ByteArray,
-            torii_url: ByteArray,
-            image_uri: ByteArray,
-            owner: felt252,
-        ) {
-            // [Setup] Datastore
-            let mut store: Store = StoreTrait::new(world);
-
-            // [Check] Game does not exist
-            let game = store.get_game(world_address, namespace);
-            game.assert_does_not_exist();
-
-            // [Effect] Create game
-            let game = GameTrait::new(
-                world_address, namespace, name, description, torii_url, image_uri, owner
-            );
-
-            // [Effect] Store game
-            store.set_game(game);
-        }
-
-        fn update_game(
-            self: @ComponentState<TContractState>,
-            world: WorldStorage,
-            world_address: felt252,
-            namespace: felt252,
-            name: ByteArray,
-            description: ByteArray,
-            torii_url: ByteArray,
-            image_uri: ByteArray,
-        ) {
-            // [Setup] Datastore
-            let mut store: Store = StoreTrait::new(world);
-
-            // [Check] Game exists
-            let mut game = store.get_game(world_address, namespace);
-            game.assert_does_exist();
-
-            // [Effect] Update game
-            game.update(name, description, torii_url, image_uri);
-
-            // [Effect] Update game
-            store.set_game(game);
-        }
-
-        fn publish_game(
-            self: @ComponentState<TContractState>,
-            world: WorldStorage,
-            world_address: felt252,
-            namespace: felt252,
-        ) {
-            // [Setup] Datastore
-            let mut store: Store = StoreTrait::new(world);
-
-            // [Check] Game exists
-            let mut game = store.get_game(world_address, namespace);
-            game.assert_does_exist();
-
-            // [Effect] Publish game
-            game.publish();
-
-            // [Effect] Store game
-            store.set_game(game);
-        }
-
-        fn hide_game(
-            self: @ComponentState<TContractState>,
-            world: WorldStorage,
-            world_address: felt252,
-            namespace: felt252,
-        ) {
-            // [Setup] Datastore
-            let mut store: Store = StoreTrait::new(world);
-
-            // [Check] Game exists
-            let mut game = store.get_game(world_address, namespace);
-            game.assert_does_exist();
-
-            // [Effect] Hide game
-            game.hide();
-
-            // [Effect] Store game
-            store.set_game(game);
-        }
-
-        fn whitelist_game(
-            self: @ComponentState<TContractState>,
-            world: WorldStorage,
-            world_address: felt252,
-            namespace: felt252,
-        ) {
-            // [Setup] Datastore
-            let mut store: Store = StoreTrait::new(world);
-
-            // [Check] Game exists
-            let mut game = store.get_game(world_address, namespace);
-            game.assert_does_exist();
-
-            // [Effect] Whitelist game
-            game.whitelist();
-
-            // [Effect] Store game
-            store.set_game(game);
-        }
-
-        fn blacklist_game(
-            self: @ComponentState<TContractState>,
-            world: WorldStorage,
-            world_address: felt252,
-            namespace: felt252,
-        ) {
-            // [Setup] Datastore
-            let mut store: Store = StoreTrait::new(world);
-
-            // [Check] Game exists
-            let mut game = store.get_game(world_address, namespace);
-            game.assert_does_exist();
-
-            // [Effect] Blacklist game
-            game.blacklist();
-
-            // [Effect] Store game
-            store.set_game(game);
-        }
-
-        fn remove_game(
-            self: @ComponentState<TContractState>,
-            world: WorldStorage,
-            world_address: felt252,
-            namespace: felt252,
-        ) {
-            // [Setup] Datastore
-            let mut store: Store = StoreTrait::new(world);
-
-            // [Check] Game exists
-            let mut game = store.get_game(world_address, namespace);
-            game.assert_does_exist();
-
-            // [Effect] Remove game
-            game.nullify();
-
-            // [Effect] Store game
-            store.set_game(game);
-        }
-
-        fn register_achievement(
+        fn register(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             world_address: felt252,
@@ -190,6 +41,9 @@ mod RegistrableComponent {
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
             game.assert_does_exist();
+
+            // [Check] Caller is owner
+            game.assert_is_owner(starknet::get_caller_address().into());
 
             // [Check] Achievement does not exist
             let achievement = store.get_achievement(world_address, namespace, identifier);
@@ -202,11 +56,11 @@ mod RegistrableComponent {
             game.add(achievement.karma);
 
             // [Effect] Store entities
-            store.set_achievement(achievement);
-            store.set_game(game);
+            store.set_achievement(@achievement);
+            store.set_game(@game);
         }
 
-        fn update_achievement(
+        fn update(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             world_address: felt252,
@@ -221,6 +75,9 @@ mod RegistrableComponent {
             let mut game = store.get_game(world_address, namespace);
             game.assert_does_exist();
 
+            // [Check] Caller is owner
+            game.assert_is_owner(starknet::get_caller_address().into());
+
             // [Check] Achievement exists
             let mut achievement = store.get_achievement(world_address, namespace, identifier);
             achievement.assert_does_exist();
@@ -231,11 +88,11 @@ mod RegistrableComponent {
             game.add(achievement.karma);
 
             // [Effect] Update entities
-            store.set_achievement(achievement);
-            store.set_game(game);
+            store.set_achievement(@achievement);
+            store.set_game(@game);
         }
 
-        fn publish_achievement(
+        fn publish(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             world_address: felt252,
@@ -248,6 +105,9 @@ mod RegistrableComponent {
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
             game.assert_does_exist();
+
+            // [Check] Caller is owner
+            game.assert_is_owner(starknet::get_caller_address().into());
 
             // [Check] Achievement exists
             let mut achievement = store.get_achievement(world_address, namespace, identifier);
@@ -257,10 +117,10 @@ mod RegistrableComponent {
             achievement.publish();
 
             // [Effect] Store achievement
-            store.set_achievement(achievement);
+            store.set_achievement(@achievement);
         }
 
-        fn hide_achievement(
+        fn hide(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             world_address: felt252,
@@ -274,6 +134,9 @@ mod RegistrableComponent {
             let mut game = store.get_game(world_address, namespace);
             game.assert_does_exist();
 
+            // [Check] Caller is owner
+            game.assert_is_owner(starknet::get_caller_address().into());
+
             // [Check] Achievement exists
             let mut achievement = store.get_achievement(world_address, namespace, identifier);
             achievement.assert_does_exist();
@@ -282,10 +145,10 @@ mod RegistrableComponent {
             achievement.hide();
 
             // [Effect] Store achievement
-            store.set_achievement(achievement);
+            store.set_achievement(@achievement);
         }
 
-        fn whitelist_achievement(
+        fn whitelist(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             world_address: felt252,
@@ -294,6 +157,11 @@ mod RegistrableComponent {
         ) {
             // [Setup] Datastore
             let mut store: Store = StoreTrait::new(world);
+
+            // [Check] Caller is allowed
+            let caller = starknet::get_caller_address().into();
+            let access = store.get_access(caller);
+            access.assert_is_allowed(Role::Admin);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -307,10 +175,10 @@ mod RegistrableComponent {
             achievement.whitelist();
 
             // [Effect] Store achievement
-            store.set_achievement(achievement);
+            store.set_achievement(@achievement);
         }
 
-        fn blacklist_achievement(
+        fn blacklist(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             world_address: felt252,
@@ -319,6 +187,11 @@ mod RegistrableComponent {
         ) {
             // [Setup] Datastore
             let mut store: Store = StoreTrait::new(world);
+
+            // [Check] Caller is allowed
+            let caller = starknet::get_caller_address().into();
+            let access = store.get_access(caller);
+            access.assert_is_allowed(Role::Admin);
 
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
@@ -332,10 +205,10 @@ mod RegistrableComponent {
             achievement.blacklist();
 
             // [Effect] Store achievement
-            store.set_achievement(achievement);
+            store.set_achievement(@achievement);
         }
 
-        fn remove_achievement(
+        fn remove(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             world_address: felt252,
@@ -358,8 +231,8 @@ mod RegistrableComponent {
             achievement.nullify();
 
             // [Effect] Store entities
-            store.set_achievement(achievement);
-            store.set_game(game);
+            store.delete_achievement(@achievement);
+            store.set_game(@game);
         }
     }
 }

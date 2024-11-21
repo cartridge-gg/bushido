@@ -1,10 +1,6 @@
 mod constants;
 mod store;
 
-mod helpers {
-    mod json;
-}
-
 mod elements {
     mod services {
         mod interface;
@@ -16,10 +12,8 @@ mod elements {
 
 mod types {
     mod tier;
-    mod socials;
     mod service;
     mod status;
-    mod metadata;
 }
 
 mod models {

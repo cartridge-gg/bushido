@@ -7,7 +7,7 @@ mod setup {
 
     use starknet::ContractAddress;
     use starknet::testing;
-    use starknet::testing::{set_contract_address, set_block_timestamp};
+    use starknet::testing::{set_caller_address, set_contract_address, set_block_timestamp};
 
     // Dojo imports
 
@@ -19,9 +19,9 @@ mod setup {
 
     // Internal imports
 
-    use arcade_registry::models::{index as models};
-    use arcade_registry::tests::mocks::controller::{Controller, IController, IControllerDispatcher};
-    use arcade_registry::tests::mocks::registrer::{Registrer, IRegistrer, IRegistrerDispatcher};
+    use registry::models::{index as models};
+    use registry::tests::mocks::register::{Register, IRegister, IRegisterDispatcher};
+    use registry::tests::mocks::tracker::{Tracker, ITracker, ITrackerDispatcher};
 
     // Constant
 
@@ -35,8 +35,8 @@ mod setup {
 
     #[derive(Copy, Drop)]
     struct Systems {
-        controller: IControllerDispatcher,
-        registrer: IRegistrerDispatcher,
+        register: IRegisterDispatcher,
+        tracker: ITrackerDispatcher,
     }
 
     #[derive(Copy, Drop)]
@@ -58,36 +58,39 @@ mod setup {
     fn setup_namespace() -> NamespaceDef {
         NamespaceDef {
             namespace: "namespace", resources: [
-                TestResource::Model(models::m_Game::TEST_CLASS_HASH),
+                TestResource::Model(models::m_Access::TEST_CLASS_HASH),
                 TestResource::Model(models::m_Achievement::TEST_CLASS_HASH),
-                TestResource::Contract(Controller::TEST_CLASS_HASH),
-                TestResource::Contract(Registrer::TEST_CLASS_HASH),
+                TestResource::Model(models::m_Game::TEST_CLASS_HASH),
+                TestResource::Contract(Register::TEST_CLASS_HASH),
+                TestResource::Contract(Tracker::TEST_CLASS_HASH),
             ].span()
         }
     }
 
     fn setup_contracts() -> Span<ContractDef> {
         [
-            ContractDefTrait::new(@"namespace", @"Controller")
-                .with_writer_of([dojo::utils::bytearray_hash(@"namespace")].span()),
-            ContractDefTrait::new(@"namespace", @"Registrer")
-                .with_writer_of([dojo::utils::bytearray_hash(@"namespace")].span()),
+            ContractDefTrait::new(@"namespace", @"Register")
+                .with_writer_of([dojo::utils::bytearray_hash(@"namespace")].span())
+                .with_init_calldata(array![OWNER().into()].span()),
+            ContractDefTrait::new(@"namespace", @"Tracker")
+                .with_writer_of([dojo::utils::bytearray_hash(@"namespace")].span())
+                .with_init_calldata(array![OWNER().into()].span()),
         ].span()
     }
 
     #[inline]
-    fn spawn_game() -> (WorldStorage, Systems, Context) {
+    fn spawn() -> (WorldStorage, Systems, Context) {
         // [Setup] World
         set_contract_address(OWNER());
         let namespace_def = setup_namespace();
         let world = spawn_test_world([namespace_def].span());
         world.sync_perms_and_inits(setup_contracts());
         // [Setup] Systems
-        let (controller_address, _) = world.dns(@"Controller").unwrap();
-        let (registrer_address, _) = world.dns(@"Registrer").unwrap();
+        let (register_address, _) = world.dns(@"Register").unwrap();
+        let (tracker_address, _) = world.dns(@"Tracker").unwrap();
         let systems = Systems {
-            controller: IControllerDispatcher { contract_address: controller_address },
-            registrer: IRegistrerDispatcher { contract_address: registrer_address },
+            register: IRegisterDispatcher { contract_address: register_address },
+            tracker: ITrackerDispatcher { contract_address: tracker_address },
         };
 
         // [Setup] Context

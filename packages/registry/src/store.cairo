@@ -10,8 +10,9 @@ use dojo::world::WorldStorage;
 use dojo::model::ModelStorage;
 // Models imports
 
-use arcade_registry::models::game::Game;
-use arcade_registry::models::achievement::Achievement;
+use registry::models::access::Access;
+use registry::models::achievement::Achievement;
+use registry::models::game::Game;
 
 // Structs
 
@@ -30,8 +31,8 @@ impl StoreImpl of StoreTrait {
     }
 
     #[inline]
-    fn get_game(self: Store, world_address: felt252, namespace: felt252) -> Game {
-        self.world.read_model((world_address, namespace))
+    fn get_access(self: Store, address: felt252) -> Access {
+        self.world.read_model(address)
     }
 
     #[inline]
@@ -42,12 +43,32 @@ impl StoreImpl of StoreTrait {
     }
 
     #[inline]
-    fn set_game(ref self: Store, game: Game) {
-        self.world.write_model(@game);
+    fn get_game(self: Store, world_address: felt252, namespace: felt252) -> Game {
+        self.world.read_model((world_address, namespace))
     }
 
     #[inline]
-    fn set_achievement(ref self: Store, achievement: Achievement) {
-        self.world.write_model(@achievement);
+    fn set_access(ref self: Store, access: @Access) {
+        self.world.write_model(access);
+    }
+
+    #[inline]
+    fn set_achievement(ref self: Store, achievement: @Achievement) {
+        self.world.write_model(achievement);
+    }
+
+    #[inline]
+    fn set_game(ref self: Store, game: @Game) {
+        self.world.write_model(game);
+    }
+
+    #[inline]
+    fn delete_achievement(ref self: Store, achievement: @Achievement) {
+        self.world.erase_model(achievement);
+    }
+
+    #[inline]
+    fn delete_game(ref self: Store, game: @Game) {
+        self.world.erase_model(game);
     }
 }

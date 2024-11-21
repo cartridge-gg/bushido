@@ -1,6 +1,6 @@
 // Internal imports
 
-use provider::helpers::json::{JsonifiableString, JsonifiableTrait};
+use registry::helpers::json::{JsonifiableString, JsonifiableTrait};
 
 #[derive(Clone, Drop)]
 pub struct Socials {
@@ -61,6 +61,12 @@ pub impl SocialsJsonifiable of JsonifiableTrait<Socials> {
         string += "," + JsonifiableString::jsonify("youtube", format!("{}", self.youtube));
         string += "," + JsonifiableString::jsonify("website", format!("{}", self.website));
         string + "}"
+    }
+}
+
+pub impl SocialsDefault of core::Default<Socials> {
+    fn default() -> Socials {
+        SocialsTrait::new(Option::None, Option::None, Option::None, Option::None, Option::None)
     }
 }
 

@@ -10,11 +10,8 @@ mod DeployableComponent {
     use provider::models::deployment::{Deployment, DeploymentTrait, DeploymentAssert};
     use provider::models::factory::{Factory, FactoryTrait, FactoryAssert};
     use provider::types::service::{Service, ServiceTrait, SERVICE_COUNT};
-    use provider::types::metadata::{Metadata, MetadataTrait};
-    use provider::types::socials::{Socials, SocialsTrait};
     use provider::types::status::Status;
     use provider::types::tier::Tier;
-    use provider::helpers::json::JsonifiableTrait;
 
     // Storage
 

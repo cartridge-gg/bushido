@@ -1,6 +1,6 @@
 // Internal imports
 
-use provider::helpers::json::{JsonifiableString, JsonifiableTrait};
+use registry::helpers::json::{JsonifiableString, JsonifiableTrait};
 
 // Constants
 
@@ -55,7 +55,9 @@ pub impl MetadataImpl of MetadataTrait {
 pub impl MetadataJsonifiable of JsonifiableTrait<Metadata> {
     fn jsonify(self: Metadata) -> ByteArray {
         let mut color = "";
-        color.append_word(self.color, COLOR_LENGTH);
+        if self.color != 0 {
+            color.append_word(self.color, COLOR_LENGTH);
+        }
         let mut string = "{";
         string += JsonifiableString::jsonify("color", format!("{}", color));
         string += "," + JsonifiableString::jsonify("name", format!("{}", self.name));
@@ -63,6 +65,12 @@ pub impl MetadataJsonifiable of JsonifiableTrait<Metadata> {
         string += "," + JsonifiableString::jsonify("image", format!("{}", self.image));
         string += "," + JsonifiableString::jsonify("banner", format!("{}", self.banner));
         string + "}"
+    }
+}
+
+pub impl MetadataDefault of core::Default<Metadata> {
+    fn default() -> Metadata {
+        MetadataTrait::new(Option::None, Option::None, Option::None, Option::None, Option::None)
     }
 }
 

@@ -2,18 +2,27 @@
 
 #[derive(Clone, Drop, Serde)]
 #[dojo::model]
+pub struct Access {
+    #[key]
+    address: felt252,
+    role: u8,
+}
+
+#[derive(Clone, Drop, Serde)]
+#[dojo::model]
 pub struct Game {
     #[key]
     world_address: felt252,
     #[key]
     namespace: felt252,
+    project: felt252,
+    active: bool,
     published: bool,
     whitelisted: bool,
-    total_karma: u16,
-    name: ByteArray,
-    description: ByteArray,
-    torii_url: ByteArray,
-    image_uri: ByteArray,
+    priority: u8,
+    karma: u16,
+    metadata: ByteArray,
+    socials: ByteArray,
     owner: felt252,
 }
 

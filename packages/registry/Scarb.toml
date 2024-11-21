@@ -1,5 +1,5 @@
 [package]
-name = "arcade_registry"
+name = "registry"
 version.workspace = true
 
 [dependencies]

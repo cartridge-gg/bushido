@@ -1,7 +1,7 @@
 // Intenral imports
 
-use arcade_registry::models::index::Achievement;
-use arcade_registry::constants;
+use registry::models::index::Achievement;
+use registry::constants;
 
 // Errors
 

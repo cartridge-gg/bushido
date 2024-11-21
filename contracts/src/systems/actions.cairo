@@ -74,8 +74,8 @@ mod Actions {
 
     // Component imports
 
-    use arcade_registry::components::controllable::ControllableComponent;
-    use arcade_registry::components::registrable::RegistrableComponent;
+    use registry::components::controllable::ControllableComponent;
+    use registry::components::registrable::RegistrableComponent;
 
     // Local imports
 
