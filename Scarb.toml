@@ -1,9 +1,10 @@
 [workspace]
 members = [
-    "packages/trophy",
-    "packages/registry",
-    "packages/provider",
     "packages/controller",
+    "packages/provider",
+    "packages/registry",
+    "packages/society",
+    "packages/trophy",
 ]
 description = "Dojo achievement library"
 homepage = "https://github.com/cartridge-gg/arcade/"
