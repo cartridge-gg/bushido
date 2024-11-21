@@ -1,3 +1,7 @@
+mod constants;
+
 mod systems {
-    mod actions;
+    mod controller;
+    mod registry;
+    mod slot;
 }

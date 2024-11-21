@@ -68,7 +68,7 @@ mod DeployableComponent {
             store.set_deployment(@deployment);
         }
 
-        fn delete(
+        fn remove(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             service: Service,
