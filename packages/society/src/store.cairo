@@ -11,11 +11,9 @@ use dojo::model::ModelStorage;
 
 // Models imports
 
-use controller::models::account::Account;
-use controller::models::controller::Controller;
-use controller::models::member::Member;
-use controller::models::signer::Signer;
-use controller::models::team::Team;
+use society::models::alliance::Alliance;
+use society::models::guild::Guild;
+use society::models::member::Member;
 
 
 // Structs
@@ -35,47 +33,32 @@ impl StoreImpl of StoreTrait {
     }
 
     #[inline]
-    fn get_account(self: Store, account_id: felt252) -> Account {
-        self.world.read_model(account_id)
+    fn get_alliance(self: Store, alliance_id: u32) -> Alliance {
+        self.world.read_model(alliance_id)
     }
 
     #[inline]
-    fn get_controller(self: Store, controller_id: felt252) -> Controller {
-        self.world.read_model(controller_id)
+    fn get_guild(self: Store, guild_id: u32) -> Guild {
+        self.world.read_model(guild_id)
     }
 
     #[inline]
-    fn get_member(self: Store, account_id: felt252, team_id: felt252) -> Member {
-        self.world.read_model((account_id, team_id))
+    fn get_member(self: Store, member_id: felt252) -> Member {
+        self.world.read_model(member_id)
     }
 
     #[inline]
-    fn get_signer(self: Store, signer_id: felt252) -> Signer {
-        self.world.read_model(signer_id)
+    fn set_alliance(ref self: Store, alliance: @Alliance) {
+        self.world.write_model(alliance);
     }
 
     #[inline]
-    fn get_team(self: Store, team_id: felt252) -> Team {
-        self.world.read_model(team_id)
-    }
-
-    #[inline]
-    fn set_account(ref self: Store, account: @Account) {
-        self.world.write_model(account);
-    }
-
-    #[inline]
-    fn set_controller(ref self: Store, controller: @Controller) {
-        self.world.write_model(controller);
+    fn set_guild(ref self: Store, guild: @Guild) {
+        self.world.write_model(guild);
     }
 
     #[inline]
     fn set_member(ref self: Store, member: @Member) {
         self.world.write_model(member);
-    }
-
-    #[inline]
-    fn set_team(ref self: Store, team: @Team) {
-        self.world.write_model(team);
     }
 }

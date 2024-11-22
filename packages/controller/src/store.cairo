@@ -13,9 +13,7 @@ use dojo::model::ModelStorage;
 
 use controller::models::account::Account;
 use controller::models::controller::Controller;
-use controller::models::member::Member;
 use controller::models::signer::Signer;
-use controller::models::team::Team;
 
 
 // Structs
@@ -45,18 +43,8 @@ impl StoreImpl of StoreTrait {
     }
 
     #[inline]
-    fn get_member(self: Store, account_id: felt252, team_id: felt252) -> Member {
-        self.world.read_model((account_id, team_id))
-    }
-
-    #[inline]
     fn get_signer(self: Store, signer_id: felt252) -> Signer {
         self.world.read_model(signer_id)
-    }
-
-    #[inline]
-    fn get_team(self: Store, team_id: felt252) -> Team {
-        self.world.read_model(team_id)
     }
 
     #[inline]
@@ -67,15 +55,5 @@ impl StoreImpl of StoreTrait {
     #[inline]
     fn set_controller(ref self: Store, controller: @Controller) {
         self.world.write_model(controller);
-    }
-
-    #[inline]
-    fn set_member(ref self: Store, member: @Member) {
-        self.world.write_model(member);
-    }
-
-    #[inline]
-    fn set_team(ref self: Store, team: @Team) {
-        self.world.write_model(team);
     }
 }

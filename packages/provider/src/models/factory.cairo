@@ -1,4 +1,4 @@
-// Intenral imports
+// Internal imports
 
 use provider::models::index::Factory;
 use provider::types::service::Service;

@@ -1,5 +1,5 @@
 #[starknet::component]
-mod FriendableComponent {
+mod FollowableComponent {
     // Dojo imports
 
     use dojo::world::WorldStorage;

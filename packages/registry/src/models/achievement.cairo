@@ -1,4 +1,4 @@
-// Intenral imports
+// Internal imports
 
 use registry::models::index::Achievement;
 use registry::constants;

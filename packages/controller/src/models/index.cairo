@@ -25,16 +25,6 @@ pub struct Controller {
     constructor_calldata: ByteArray,
 }
 
-#[derive(Copy, Drop, Serde)]
-#[dojo::model]
-pub struct Member {
-    #[key]
-    account_id: felt252,
-    #[key]
-    team_id: felt252,
-    role: u8,
-}
-
 #[derive(Clone, Drop, Serde)]
 #[dojo::model]
 pub struct Signer {
@@ -44,13 +34,4 @@ pub struct Signer {
     controller_id: felt252,
     method: u8,
     metadata: ByteArray,
-}
-
-#[derive(Clone, Drop, Serde)]
-#[dojo::model]
-pub struct Team {
-    #[key]
-    id: felt252,
-    name: felt252,
-    description: ByteArray,
 }

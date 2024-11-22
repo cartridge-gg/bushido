@@ -9,9 +9,7 @@ mod ControllableComponent {
     use controller::store::{Store, StoreTrait};
     use controller::models::account::{Account, AccountTrait, AccountAssert};
     use controller::models::controller::{Controller, ControllerTrait, ControllerAssert};
-    use controller::models::member::{Member, MemberTrait, MemberAssert};
     use controller::models::signer::{Signer, SignerTrait, SignerAssert};
-    use controller::models::team::{Team, TeamTrait, TeamAssert};
 
     // Storage
 

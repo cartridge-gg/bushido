@@ -10,8 +10,11 @@ mod DeployableComponent {
     use provider::models::deployment::{Deployment, DeploymentTrait, DeploymentAssert};
     use provider::models::factory::{Factory, FactoryTrait, FactoryAssert};
     use provider::types::service::{Service, ServiceTrait, SERVICE_COUNT};
+    use provider::models::team::{Team, TeamTrait, TeamAssert};
+    use provider::models::teammate::{Teammate, TeammateTrait, TeammateAssert};
     use provider::types::status::Status;
     use provider::types::tier::Tier;
+    use provider::types::role::Role;
 
     // Storage
 
@@ -60,10 +63,30 @@ mod DeployableComponent {
             let deployment = store.get_deployment(service.into(), project);
             deployment.assert_does_not_exist();
 
+            // [Check] Caller permission
+            let account_id: felt252 = starknet::get_caller_address().into();
+            let mut team = store.get_team(project);
+            if team.exists() {
+                // [Check] Caller is at least an admin
+                let teammate = store.get_teammate(project, team.time, account_id);
+                teammate.assert_is_allowed(Role::Admin);
+                // [Effect] Increment deployment count
+                team.deploy();
+                store.set_team(@team);
+            } else {
+                // [Effect] Create team
+                let time = starknet::get_block_timestamp();
+                let mut team = TeamTrait::new(project, time, project, "");
+                team.deploy();
+                store.set_team(@team);
+                // [Effect] Create teammate
+                let teammate = TeammateTrait::new(project, time, account_id, Role::Owner);
+                store.set_teammate(@teammate);
+            }
+
             // [Effect] Create deployment
-            let owner = starknet::get_caller_address().into();
             let deployment = DeploymentTrait::new(
-                service: service, project: project, owner: owner, tier: tier, config: "",
+                service: service, project: project, tier: tier, config: "",
             );
             store.set_deployment(@deployment);
         }
@@ -85,12 +108,29 @@ mod DeployableComponent {
             let mut deployment = store.get_deployment(service.into(), project);
             deployment.assert_does_exist();
 
-            // [Check] Caller is owner
-            deployment.assert_is_owner(starknet::get_caller_address().into());
+            // [Check] Team exists
+            let mut team = store.get_team(project);
+            team.assert_does_exist();
+
+            // [Check] Caller is at least admin
+            let account_id: felt252 = starknet::get_caller_address().into();
+            let teammate = store.get_teammate(project, team.time, account_id);
+            teammate.assert_is_allowed(Role::Admin);
 
             // [Effect] Delete deployment
             deployment.nullify();
             store.delete_deployment(@deployment);
+
+            // [Effect] Decrement deployment count
+            team.remove();
+
+            // [Effect] Delete team if no deployments left
+            if team.deployment_count == 0 {
+                team.nullify();
+                store.delete_team(@team);
+            } else {
+                store.set_team(@team);
+            }
         }
     }
 }

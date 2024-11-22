@@ -13,6 +13,8 @@ use dojo::model::ModelStorage;
 
 use provider::models::deployment::Deployment;
 use provider::models::factory::Factory;
+use provider::models::index::Team;
+use provider::models::index::Teammate;
 
 // Structs
 
@@ -41,6 +43,16 @@ impl StoreImpl of StoreTrait {
     }
 
     #[inline]
+    fn get_team(self: Store, team_id: felt252) -> Team {
+        self.world.read_model(team_id)
+    }
+
+    #[inline]
+    fn get_teammate(self: Store, team_id: felt252, time: u64, account_id: felt252) -> Teammate {
+        self.world.read_model((team_id, time, account_id))
+    }
+
+    #[inline]
     fn set_deployment(ref self: Store, deployment: @Deployment) {
         self.world.write_model(deployment);
     }
@@ -51,7 +63,27 @@ impl StoreImpl of StoreTrait {
     }
 
     #[inline]
+    fn set_team(ref self: Store, team: @Team) {
+        self.world.write_model(team);
+    }
+
+    #[inline]
+    fn set_teammate(ref self: Store, teammate: @Teammate) {
+        self.world.write_model(teammate);
+    }
+
+    #[inline]
     fn delete_deployment(ref self: Store, deployment: @Deployment) {
         self.world.erase_model(deployment);
+    }
+
+    #[inline]
+    fn delete_team(ref self: Store, team: @Team) {
+        self.world.erase_model(team);
+    }
+
+    #[inline]
+    fn delete_teammate(ref self: Store, teammate: @Teammate) {
+        self.world.erase_model(teammate);
     }
 }

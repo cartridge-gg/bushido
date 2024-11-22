@@ -1,4 +1,4 @@
-// Intenral imports
+// Internal imports
 
 use registry::constants;
 use registry::models::index::Game;

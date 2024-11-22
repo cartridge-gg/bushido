@@ -8,9 +8,12 @@ mod types {
 mod models {
     mod index;
     mod member;
+    mod guild;
+    mod alliance;
 }
 
 mod components {
-    mod friendable;
+    mod followable;
     mod guildable;
+    mod allianceable;
 }

@@ -1,4 +1,4 @@
-// Intenral imports
+// Internal imports
 
 use controller::models::index::Account;
 
