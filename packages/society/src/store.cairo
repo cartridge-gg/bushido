@@ -8,13 +8,14 @@ use starknet::SyscallResultTrait;
 
 use dojo::world::WorldStorage;
 use dojo::model::ModelStorage;
+use dojo::event::EventStorage;
 
 // Models imports
 
 use society::models::alliance::Alliance;
 use society::models::guild::Guild;
 use society::models::member::Member;
-
+use society::events::follow::{Follow, FollowTrait};
 
 // Structs
 
@@ -60,5 +61,17 @@ impl StoreImpl of StoreTrait {
     #[inline]
     fn set_member(ref self: Store, member: @Member) {
         self.world.write_model(member);
+    }
+
+    #[inline]
+    fn follow(ref self: Store, follower: felt252, followed: felt252, time: u64) {
+        let event = FollowTrait::new(follower, followed, time);
+        self.world.emit_event(@event);
+    }
+
+    #[inline]
+    fn unfollow(ref self: Store, follower: felt252, followed: felt252) {
+        let event = FollowTrait::new(follower, followed, 0);
+        self.world.emit_event(@event);
     }
 }
