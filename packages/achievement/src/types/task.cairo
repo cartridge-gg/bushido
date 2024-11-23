@@ -1,13 +1,13 @@
 // Internal imports
 
-use arcade_trophy::types::index::Task;
+use achievement::types::index::Task;
 
 // Errors
 
 pub mod errors {
-    pub const TROPHY_INVALID_ID: felt252 = 'Task: invalid id';
-    pub const TROPHY_INVALID_DESCRIPTION: felt252 = 'Task: invalid description';
-    pub const TROPHY_INVALID_TOTAL: felt252 = 'Task: invalid total';
+    pub const TASK_INVALID_ID: felt252 = 'Task: invalid id';
+    pub const TASK_INVALID_DESCRIPTION: felt252 = 'Task: invalid description';
+    pub const TASK_INVALID_TOTAL: felt252 = 'Task: invalid total';
 }
 
 // Implementations
@@ -29,17 +29,17 @@ impl TaskImpl of TaskTrait {
 impl TaskAssert of AssertTrait {
     #[inline]
     fn assert_valid_id(id: felt252) {
-        assert(id != 0, errors::TROPHY_INVALID_ID);
+        assert(id != 0, errors::TASK_INVALID_ID);
     }
 
     #[inline]
     fn assert_valid_total(total: u32) {
-        assert(total > 0, errors::TROPHY_INVALID_TOTAL);
+        assert(total > 0, errors::TASK_INVALID_TOTAL);
     }
 
     #[inline]
     fn assert_valid_description(description: @ByteArray) {
-        assert(description.len() > 0, errors::TROPHY_INVALID_DESCRIPTION);
+        assert(description.len() > 0, errors::TASK_INVALID_DESCRIPTION);
     }
 }
 
@@ -51,11 +51,11 @@ mod tests {
 
     // Constants
 
-    const ID: felt252 = 'TROPHY';
+    const ID: felt252 = 'TASK';
     const TOTAL: u32 = 100;
 
     #[test]
-    fn test_achievement_creation_new() {
+    fn test_task_creation_new() {
         let achievement = TaskTrait::new(ID, TOTAL, "DESCRIPTION");
         assert_eq!(achievement.id, ID);
         assert_eq!(achievement.total, TOTAL);
@@ -64,20 +64,20 @@ mod tests {
 
     #[test]
     #[should_panic(expected: ('Task: invalid id',))]
-    fn test_achievement_creation_new_invalid_id() {
+    fn test_task_creation_new_invalid_id() {
         TaskTrait::new(0, TOTAL, "DESCRIPTION");
     }
 
 
     #[test]
     #[should_panic(expected: ('Task: invalid total',))]
-    fn test_achievement_creation_new_invalid_total() {
+    fn test_task_creation_new_invalid_total() {
         TaskTrait::new(ID, 0, "DESCRIPTION");
     }
 
     #[test]
     #[should_panic(expected: ('Task: invalid description',))]
-    fn test_achievement_creation_new_invalid_description() {
+    fn test_task_creation_new_invalid_description() {
         TaskTrait::new(ID, TOTAL, "");
     }
 }

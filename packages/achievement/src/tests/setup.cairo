@@ -19,8 +19,8 @@ mod setup {
 
     // Internal imports
 
-    use arcade_trophy::events::{index as events};
-    use arcade_trophy::tests::mocks::achiever::{Achiever, IAchiever, IAchieverDispatcher};
+    use achievement::events::{index as events};
+    use achievement::tests::mocks::achiever::{Achiever, IAchiever, IAchieverDispatcher};
 
     // Constant
 
@@ -58,6 +58,7 @@ mod setup {
             namespace: "namespace", resources: [
                 TestResource::Event(events::e_TrophyCreation::TEST_CLASS_HASH),
                 TestResource::Event(events::e_TrophyProgression::TEST_CLASS_HASH),
+                TestResource::Event(events::e_TrophyPinning::TEST_CLASS_HASH),
                 TestResource::Contract(Achiever::TEST_CLASS_HASH),
             ].span()
         }

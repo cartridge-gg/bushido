@@ -7,12 +7,14 @@ mod types {
 
 mod events {
     mod index;
-    mod trophy;
+    mod creation;
     mod progress;
+    mod pinning;
 }
 
 mod components {
     mod achievable;
+    mod pinnable;
 }
 
 #[cfg(test)]

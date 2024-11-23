@@ -1,11 +1,11 @@
-/// Events
+//! Events
 
 // Internal imports
 
-use arcade_trophy::types::task::Task;
+use achievement::types::task::Task;
 
 #[derive(Clone, Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 pub struct TrophyCreation {
     #[key]
     id: felt252,
@@ -23,12 +23,22 @@ pub struct TrophyCreation {
 }
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::event(historical: true)]
+#[dojo::event]
 pub struct TrophyProgression {
     #[key]
     player_id: felt252,
     #[key]
     task_id: felt252,
     count: u32,
+    time: u64,
+}
+
+#[derive(Copy, Drop, Serde)]
+#[dojo::event]
+pub struct TrophyPinning {
+    #[key]
+    player_id: felt252,
+    #[key]
+    achievement_id: felt252,
     time: u64,
 }

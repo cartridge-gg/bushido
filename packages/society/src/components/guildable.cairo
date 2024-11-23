@@ -35,6 +35,7 @@ mod GuildableComponent {
         fn create(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            player_id: felt252,
             color: Option<felt252>,
             name: Option<ByteArray>,
             description: Option<ByteArray>,
@@ -50,8 +51,7 @@ mod GuildableComponent {
             let mut store = StoreTrait::new(world);
 
             // [Check] Member does not belong to a guild
-            let member_id: felt252 = starknet::get_caller_address().into();
-            let mut member = store.get_member(member_id);
+            let mut member = store.get_member(player_id);
             member.assert_can_join();
 
             // [Effect] Create a guild
@@ -72,13 +72,17 @@ mod GuildableComponent {
             store.set_guild(@guild);
         }
 
-        fn open(self: @ComponentState<TContractState>, world: WorldStorage, free: bool) {
+        fn open(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            free: bool
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let admin = store.get_member(caller);
+            let admin = store.get_member(player_id);
             admin.assert_is_allowed(Role::Officer);
 
             // [Effect] Guild opens
@@ -89,13 +93,12 @@ mod GuildableComponent {
             store.set_guild(@guild);
         }
 
-        fn close(self: @ComponentState<TContractState>, world: WorldStorage) {
+        fn close(self: @ComponentState<TContractState>, world: WorldStorage, player_id: felt252) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let admin = store.get_member(caller);
+            let admin = store.get_member(player_id);
             admin.assert_is_allowed(Role::Officer);
 
             // [Effect] Guild closes
@@ -106,13 +109,17 @@ mod GuildableComponent {
             store.set_guild(@guild);
         }
 
-        fn crown(self: @ComponentState<TContractState>, world: WorldStorage, member_id: felt252) {
+        fn crown(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            member_id: felt252
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let mut master = store.get_member(caller);
+            let mut master = store.get_member(player_id);
             master.assert_is_allowed(Role::Master);
 
             // [Check] Member is in the same guild
@@ -128,13 +135,17 @@ mod GuildableComponent {
             store.set_member(@member);
         }
 
-        fn promote(self: @ComponentState<TContractState>, world: WorldStorage, member_id: felt252) {
+        fn promote(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            member_id: felt252
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let mut admin = store.get_member(caller);
+            let admin = store.get_member(player_id);
             admin.assert_is_allowed(Role::Officer);
 
             // [Check] Member is in the same guild
@@ -148,13 +159,17 @@ mod GuildableComponent {
             store.set_member(@member);
         }
 
-        fn demote(self: @ComponentState<TContractState>, world: WorldStorage, member_id: felt252) {
+        fn demote(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            member_id: felt252
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let mut master = store.get_member(caller);
+            let master = store.get_member(player_id);
             master.assert_is_allowed(Role::Master);
 
             // [Check] Member is in the same guild
@@ -168,13 +183,17 @@ mod GuildableComponent {
             store.set_member(@member);
         }
 
-        fn hire(self: @ComponentState<TContractState>, world: WorldStorage, member_id: felt252) {
+        fn hire(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            member_id: felt252
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let mut admin = store.get_member(caller);
+            let admin = store.get_member(player_id);
             admin.assert_is_allowed(Role::Officer);
 
             // [Check] Guild is open
@@ -191,13 +210,17 @@ mod GuildableComponent {
             store.set_member(@member);
         }
 
-        fn fire(self: @ComponentState<TContractState>, world: WorldStorage, member_id: felt252) {
+        fn fire(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            member_id: felt252
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let mut admin = store.get_member(caller);
+            let admin = store.get_member(player_id);
             admin.assert_is_allowed(Role::Officer);
 
             // [Check] Admin has authority over the member
@@ -219,7 +242,12 @@ mod GuildableComponent {
             store.set_member(@member);
         }
 
-        fn request(self: @ComponentState<TContractState>, world: WorldStorage, guild_id: u32) {
+        fn request(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            guild_id: u32
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
@@ -231,8 +259,7 @@ mod GuildableComponent {
             guild.assert_is_open();
 
             // [Effect] Member requests to join the guild
-            let caller = starknet::get_caller_address().into();
-            let mut member = store.get_member(caller);
+            let mut member = store.get_member(player_id);
             member.request(guild_id);
 
             // [Effect] Member joins the guild if it is free
@@ -248,26 +275,24 @@ mod GuildableComponent {
             store.set_member(@member);
         }
 
-        fn cancel(self: @ComponentState<TContractState>, world: WorldStorage) {
+        fn cancel(self: @ComponentState<TContractState>, world: WorldStorage, player_id: felt252) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Effect] Member cancels the request
-            let caller = starknet::get_caller_address().into();
-            let mut member = store.get_member(caller);
+            let mut member = store.get_member(player_id);
             member.cancel();
 
             // [Effect] Store entities
             store.set_member(@member);
         }
 
-        fn leave(self: @ComponentState<TContractState>, world: WorldStorage) {
+        fn leave(self: @ComponentState<TContractState>, world: WorldStorage, player_id: felt252) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Effect] Member leaves the guild
-            let caller = starknet::get_caller_address().into();
-            let mut member = store.get_member(caller);
+            let mut member = store.get_member(player_id);
             member.leave();
 
             // [Effect] Store entities

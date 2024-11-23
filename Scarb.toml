@@ -4,7 +4,7 @@ members = [
     "packages/provider",
     "packages/registry",
     "packages/society",
-    "packages/trophy",
+    "packages/achievement",
 ]
 description = "Dojo achievement library"
 homepage = "https://github.com/cartridge-gg/arcade/"

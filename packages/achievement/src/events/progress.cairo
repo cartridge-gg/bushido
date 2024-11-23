@@ -1,6 +1,6 @@
 // Internal imports
 
-use arcade_trophy::events::index::TrophyProgression;
+use achievement::events::index::TrophyProgression;
 
 // Errors
 
@@ -15,7 +15,7 @@ impl ProgressImpl of ProgressTrait {
     #[inline]
     fn new(player_id: felt252, task_id: felt252, count: u32, time: u64,) -> TrophyProgression {
         // [Check] Inputs
-        ProgressAssert::assert_valid_id(task_id);
+        ProgressAssert::assert_valid_task(task_id);
         // [Return] Progress
         TrophyProgression { player_id, task_id, count, time }
     }
@@ -24,7 +24,7 @@ impl ProgressImpl of ProgressTrait {
 #[generate_trait]
 impl ProgressAssert of AssertTrait {
     #[inline]
-    fn assert_valid_id(task_id: felt252) {
+    fn assert_valid_task(task_id: felt252) {
         assert(task_id != 0, errors::PROGRESS_INVALID_TASK);
     }
 }

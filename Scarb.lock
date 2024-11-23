@@ -2,7 +2,7 @@
 version = 1
 
 [[package]]
-name = "arcade_trophy"
+name = "achievement"
 version = "0.0.0"
 dependencies = [
  "dojo",

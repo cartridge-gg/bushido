@@ -4,18 +4,14 @@ mod AchievableComponent {
 
     use core::debug::PrintTrait;
 
-    // Starknet imports
-
-    use starknet::info::{get_caller_address, get_block_timestamp, get_contract_address};
-
     // Dojo imports
 
     use dojo::world::WorldStorage;
 
     // Internal imports
 
-    use arcade_trophy::types::task::Task;
-    use arcade_trophy::store::{Store, StoreTrait};
+    use achievement::types::task::Task;
+    use achievement::store::{Store, StoreTrait};
 
     // Errors
 
@@ -111,7 +107,7 @@ mod AchievableComponent {
             let store: Store = StoreTrait::new(world);
 
             // [Event] Emit achievement completion
-            let time: u64 = get_block_timestamp();
+            let time: u64 = starknet::get_block_timestamp();
             store.progress(player_id, task_id, count, time);
         }
     }

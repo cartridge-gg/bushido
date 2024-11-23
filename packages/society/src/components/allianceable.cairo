@@ -36,6 +36,7 @@ mod AllianceableComponent {
         fn create(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            player_id: felt252,
             color: Option<felt252>,
             name: Option<ByteArray>,
             description: Option<ByteArray>,
@@ -51,8 +52,7 @@ mod AllianceableComponent {
             let mut store = StoreTrait::new(world);
 
             // [Check] Member is a guild master
-            let member_id: felt252 = starknet::get_caller_address().into();
-            let member = store.get_member(member_id);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Check] Guild can join an alliance
@@ -77,13 +77,17 @@ mod AllianceableComponent {
             store.set_alliance(@alliance);
         }
 
-        fn open(self: @ComponentState<TContractState>, world: WorldStorage, free: bool) {
+        fn open(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            free: bool
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Check] Guild exists and is the alliance master
@@ -98,13 +102,12 @@ mod AllianceableComponent {
             store.set_alliance(@alliance);
         }
 
-        fn close(self: @ComponentState<TContractState>, world: WorldStorage) {
+        fn close(self: @ComponentState<TContractState>, world: WorldStorage, player_id: felt252) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Check] Guild exists and is the alliance master
@@ -119,13 +122,17 @@ mod AllianceableComponent {
             store.set_alliance(@alliance);
         }
 
-        fn crown(self: @ComponentState<TContractState>, world: WorldStorage, guild_id: u32) {
+        fn crown(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            guild_id: u32
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Check] Guild exists and is the alliance master
@@ -145,13 +152,17 @@ mod AllianceableComponent {
             store.set_guild(@guild);
         }
 
-        fn hire(self: @ComponentState<TContractState>, world: WorldStorage, guild_id: u32) {
+        fn hire(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            guild_id: u32
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Check] Guild exists and is the alliance master
@@ -172,13 +183,17 @@ mod AllianceableComponent {
             store.set_guild(@guild);
         }
 
-        fn fire(self: @ComponentState<TContractState>, world: WorldStorage, guild_id: u32) {
+        fn fire(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            guild_id: u32
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Check] Guild exists and is the alliance master
@@ -204,13 +219,17 @@ mod AllianceableComponent {
             store.set_guild(@guild);
         }
 
-        fn request(self: @ComponentState<TContractState>, world: WorldStorage, alliance_id: u32) {
+        fn request(
+            self: @ComponentState<TContractState>,
+            world: WorldStorage,
+            player_id: felt252,
+            alliance_id: u32
+        ) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Check] Alliance exists
@@ -237,13 +256,12 @@ mod AllianceableComponent {
             store.set_guild(@guild);
         }
 
-        fn cancel(self: @ComponentState<TContractState>, world: WorldStorage) {
+        fn cancel(self: @ComponentState<TContractState>, world: WorldStorage, player_id: felt252) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Effect] Guild cancels the request
@@ -254,13 +272,12 @@ mod AllianceableComponent {
             store.set_guild(@guild);
         }
 
-        fn leave(self: @ComponentState<TContractState>, world: WorldStorage) {
+        fn leave(self: @ComponentState<TContractState>, world: WorldStorage, player_id: felt252) {
             // [Setup] Datastore
             let mut store = StoreTrait::new(world);
 
             // [Check] Caller exists and is allowed
-            let caller = starknet::get_caller_address().into();
-            let member = store.get_member(caller);
+            let member = store.get_member(player_id);
             member.assert_is_allowed(Role::Master);
 
             // [Effect] Guild leaves the alliance

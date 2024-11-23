@@ -1,12 +1,20 @@
 #[starknet::component]
-mod FollowableComponent {
+mod PinnableComponent {
+    // Core imports
+
+    use core::debug::PrintTrait;
+
     // Dojo imports
 
     use dojo::world::WorldStorage;
 
     // Internal imports
 
-    use society::store::{Store, StoreTrait};
+    use achievement::store::{Store, StoreTrait};
+
+    // Errors
+
+    mod errors {}
 
     // Storage
 
@@ -23,31 +31,28 @@ mod FollowableComponent {
     impl InternalImpl<
         TContractState, +HasComponent<TContractState>
     > of InternalTrait<TContractState> {
-        fn follow(
+        fn pin(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             player_id: felt252,
-            followed: felt252
+            achievement_id: felt252,
         ) {
-            // [Setup] Datastore
-            let mut store = StoreTrait::new(world);
+            // [Setup] Store
+            let store: Store = StoreTrait::new(world);
 
-            // [Effect] Follow
+            // [Event] Emit achievement creation
             let time = starknet::get_block_timestamp();
-            store.follow(player_id, followed, time);
+            store.pin(player_id, achievement_id, time);
         }
 
-        fn unfollow(
+        fn unpin(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
             player_id: felt252,
-            followed: felt252
+            achievement_id: felt252,
         ) {
-            // [Setup] Datastore
-            let mut store = StoreTrait::new(world);
-
-            // [Effect] Unfollow
-            store.unfollow(player_id, followed);
+            let store: Store = StoreTrait::new(world);
+            store.unpin(player_id, achievement_id);
         }
     }
 }

@@ -11,12 +11,12 @@ use dojo::event::EventStorage;
 
 // Events imports
 
-use arcade_trophy::events::trophy::{TrophyCreation, TrophyTrait};
-use arcade_trophy::events::progress::{TrophyProgression, ProgressTrait};
-
+use achievement::events::creation::{TrophyCreation, CreationTrait};
+use achievement::events::progress::{TrophyProgression, ProgressTrait};
+use achievement::events::pinning::{TrophyPinning, PinningTrait};
 // Internal imports
 
-use arcade_trophy::types::task::{Task, TaskTrait};
+use achievement::types::task::{Task, TaskTrait};
 
 // Structs
 
@@ -50,7 +50,7 @@ impl StoreImpl of StoreTrait {
         tasks: Span<Task>,
         data: ByteArray,
     ) {
-        let event: TrophyCreation = TrophyTrait::new(
+        let event: TrophyCreation = CreationTrait::new(
             id, hidden, index, points, start, end, group, icon, title, description, tasks, data
         );
         self.world.emit_event(@event);
@@ -59,6 +59,18 @@ impl StoreImpl of StoreTrait {
     #[inline]
     fn progress(mut self: Store, player_id: felt252, task_id: felt252, count: u32, time: u64,) {
         let event: TrophyProgression = ProgressTrait::new(player_id, task_id, count, time);
+        self.world.emit_event(@event);
+    }
+
+    #[inline]
+    fn pin(mut self: Store, player_id: felt252, achievement_id: felt252, time: u64,) {
+        let event: TrophyPinning = PinningTrait::new(player_id, achievement_id, time);
+        self.world.emit_event(@event);
+    }
+
+    #[inline]
+    fn unpin(mut self: Store, player_id: felt252, achievement_id: felt252,) {
+        let event: TrophyPinning = PinningTrait::new(player_id, achievement_id, 0);
         self.world.emit_event(@event);
     }
 }

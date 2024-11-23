@@ -1,22 +1,27 @@
 // Internal imports
 
-use arcade_trophy::events::index::TrophyCreation;
-use arcade_trophy::types::task::{Task, TaskTrait};
+use achievement::events::index::TrophyCreation;
+use achievement::types::task::{Task, TaskTrait};
+
+// Constants
+
+const MAX_POINTS: u16 = 100;
 
 // Errors
 
 pub mod errors {
-    pub const TROPHY_INVALID_ID: felt252 = 'Trophy: invalid id';
-    pub const TROPHY_INVALID_TITLE: felt252 = 'Trophy: invalid title';
-    pub const TROPHY_INVALID_DESCRIPTION: felt252 = 'Trophy: invalid desc.';
-    pub const TROPHY_INVALID_TASKS: felt252 = 'Trophy: invalid tasks.';
-    pub const TROPHY_INVALID_DURATION: felt252 = 'Trophy: invalid duration.';
+    pub const CREATION_INVALID_ID: felt252 = 'Creation: invalid id';
+    pub const CREATION_INVALID_TITLE: felt252 = 'Creation: invalid title';
+    pub const CREATION_INVALID_DESCRIPTION: felt252 = 'Creation: invalid desc.';
+    pub const CREATION_INVALID_TASKS: felt252 = 'Creation: invalid tasks';
+    pub const CREATION_INVALID_DURATION: felt252 = 'Creation: invalid duration';
+    pub const CREATION_INVALID_POINTS: felt252 = 'Creation: too much points';
 }
 
 // Implementations
 
 #[generate_trait]
-impl TrophyImpl of TrophyTrait {
+impl CreationImpl of CreationTrait {
     #[inline]
     fn new(
         id: felt252,
@@ -34,10 +39,11 @@ impl TrophyImpl of TrophyTrait {
     ) -> TrophyCreation {
         // [Check] Inputs
         // [Info] We don't check points here, leave free the game to decide
-        TrophyAssert::assert_valid_id(id);
-        TrophyAssert::assert_valid_title(title);
-        TrophyAssert::assert_valid_description(@description);
-        TrophyAssert::assert_valid_duration(start, end);
+        CreationAssert::assert_valid_id(id);
+        CreationAssert::assert_valid_title(title);
+        CreationAssert::assert_valid_description(@description);
+        CreationAssert::assert_valid_duration(start, end);
+        CreationAssert::assert_valid_points(points);
         // [Return] TrophyCreation
         TrophyCreation {
             id, hidden, index, points, start, end, group, icon, title, description, tasks, data
@@ -46,30 +52,35 @@ impl TrophyImpl of TrophyTrait {
 }
 
 #[generate_trait]
-impl TrophyAssert of AssertTrait {
+impl CreationAssert of AssertTrait {
     #[inline]
     fn assert_valid_id(id: felt252) {
-        assert(id != 0, errors::TROPHY_INVALID_ID);
+        assert(id != 0, errors::CREATION_INVALID_ID);
     }
 
     #[inline]
     fn assert_valid_title(title: felt252) {
-        assert(title != 0, errors::TROPHY_INVALID_TITLE);
+        assert(title != 0, errors::CREATION_INVALID_TITLE);
     }
 
     #[inline]
     fn assert_valid_description(description: @ByteArray) {
-        assert(description.len() > 0, errors::TROPHY_INVALID_DESCRIPTION);
+        assert(description.len() > 0, errors::CREATION_INVALID_DESCRIPTION);
     }
 
     #[inline]
     fn assert_valid_tasks(tasks: Span<Task>) {
-        assert(tasks.len() > 0, errors::TROPHY_INVALID_TASKS);
+        assert(tasks.len() > 0, errors::CREATION_INVALID_TASKS);
     }
 
     #[inline]
     fn assert_valid_duration(start: u64, end: u64) {
-        assert(end >= start, errors::TROPHY_INVALID_DURATION);
+        assert(end >= start, errors::CREATION_INVALID_DURATION);
+    }
+
+    #[inline]
+    fn assert_valid_points(points: u16) {
+        assert(points <= MAX_POINTS, errors::CREATION_INVALID_POINTS);
     }
 }
 
@@ -77,12 +88,12 @@ impl TrophyAssert of AssertTrait {
 mod tests {
     // Local imports
 
-    use super::TrophyTrait;
-    use super::{Task, TaskTrait};
+    use super::CreationTrait;
+    use super::{Task, TaskTrait, MAX_POINTS};
 
     // Constants
 
-    const ID: felt252 = 'TROPHY';
+    const ID: felt252 = 'CREATION';
     const INDEX: u8 = 0;
     const GROUP: felt252 = 'GROUP';
     const HIDDEN: bool = false;
@@ -97,7 +108,7 @@ mod tests {
     #[test]
     fn test_achievement_creation_new() {
         let tasks: Array<Task> = array![TaskTrait::new(TASK_ID, TOTAL, "TASK DESCRIPTION"),];
-        let achievement = TrophyTrait::new(
+        let achievement = CreationTrait::new(
             ID,
             HIDDEN,
             INDEX,
@@ -126,10 +137,10 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected: ('Trophy: invalid id',))]
+    #[should_panic(expected: ('Creation: invalid id',))]
     fn test_achievement_creation_new_invalid_id() {
         let tasks: Array<Task> = array![TaskTrait::new(TASK_ID, TOTAL, "TASK DESCRIPTION"),];
-        TrophyTrait::new(
+        CreationTrait::new(
             0,
             HIDDEN,
             INDEX,
@@ -146,29 +157,49 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected: ('Trophy: invalid title',))]
+    #[should_panic(expected: ('Creation: invalid title',))]
     fn test_achievement_creation_new_invalid_title() {
         let tasks: Array<Task> = array![TaskTrait::new(TASK_ID, TOTAL, "TASK DESCRIPTION"),];
-        TrophyTrait::new(
+        CreationTrait::new(
             ID, HIDDEN, INDEX, POINTS, START, END, GROUP, ICON, 0, "DESCRIPTION", tasks.span(), ""
         );
     }
 
     #[test]
-    #[should_panic(expected: ('Trophy: invalid desc.',))]
+    #[should_panic(expected: ('Creation: invalid desc.',))]
     fn test_achievement_creation_new_invalid_description() {
         let tasks: Array<Task> = array![TaskTrait::new(TASK_ID, TOTAL, "TASK DESCRIPTION"),];
-        TrophyTrait::new(
+        CreationTrait::new(
             ID, HIDDEN, INDEX, POINTS, START, END, GROUP, ICON, TITLE, "", tasks.span(), ""
         );
     }
 
     #[test]
-    #[should_panic(expected: ('Trophy: invalid duration.',))]
+    #[should_panic(expected: ('Creation: invalid duration',))]
     fn test_achievement_creation_new_invalid_duration() {
         let tasks: Array<Task> = array![TaskTrait::new(TASK_ID, TOTAL, "TASK DESCRIPTION"),];
-        TrophyTrait::new(
+        CreationTrait::new(
             ID, HIDDEN, INDEX, POINTS, START, 0, GROUP, ICON, TITLE, "DESCRIPTION", tasks.span(), ""
+        );
+    }
+
+    #[test]
+    #[should_panic(expected: ('Creation: too much points',))]
+    fn test_achievement_creation_new_invalid_points() {
+        let tasks: Array<Task> = array![TaskTrait::new(TASK_ID, TOTAL, "TASK DESCRIPTION"),];
+        CreationTrait::new(
+            ID,
+            HIDDEN,
+            INDEX,
+            MAX_POINTS + 1,
+            START,
+            END,
+            GROUP,
+            ICON,
+            TITLE,
+            "DESCRIPTION",
+            tasks.span(),
+            ""
         );
     }
 }

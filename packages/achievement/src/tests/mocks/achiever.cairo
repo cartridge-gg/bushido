@@ -1,6 +1,6 @@
 // Internal imports
 
-use arcade_trophy::types::task::Task;
+use achievement::types::task::Task;
 
 #[starknet::interface]
 trait IAchiever<TContractState> {
@@ -35,8 +35,8 @@ pub mod Achiever {
 
     // Internal imports
 
-    use arcade_trophy::types::task::Task;
-    use arcade_trophy::components::achievable::AchievableComponent;
+    use achievement::types::task::Task;
+    use achievement::components::achievable::AchievableComponent;
 
     // Local imports
 

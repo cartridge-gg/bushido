@@ -14,13 +14,11 @@ use dojo::world::world::Event;
 
 // Internal imports
 
-use arcade_trophy::types::task::{Task, TaskTrait};
-use arcade_trophy::events::trophy::{TrophyCreation, TrophyTrait};
-use arcade_trophy::events::progress::{TrophyProgression, ProgressTrait};
-use arcade_trophy::tests::mocks::achiever::{
-    Achiever, IAchieverDispatcher, IAchieverDispatcherTrait
-};
-use arcade_trophy::tests::setup::setup::{spawn_game, clear_events, Systems, PLAYER};
+use achievement::types::task::{Task, TaskTrait};
+use achievement::events::creation::{TrophyCreation, CreationTrait};
+use achievement::events::progress::{TrophyProgression, ProgressTrait};
+use achievement::tests::mocks::achiever::{Achiever, IAchieverDispatcher, IAchieverDispatcherTrait};
+use achievement::tests::setup::setup::{spawn_game, clear_events, Systems, PLAYER};
 
 // Constants
 
