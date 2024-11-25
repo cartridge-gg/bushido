@@ -1,12 +1,12 @@
 // Interfaces
 
 #[starknet::interface]
-trait IController<TContractState> {}
+trait IWallet<TContractState> {}
 
 // Contracts
 
 #[dojo::contract]
-mod Controller {
+mod Wallet {
     // Dojo imports
 
     use dojo::world::WorldStorage;
@@ -21,7 +21,7 @@ mod Controller {
 
     // Local imports
 
-    use super::IController;
+    use super::IWallet;
 
     // Components
 
@@ -48,7 +48,7 @@ mod Controller {
     // Implementations
 
     #[abi(embed_v0)]
-    impl ControllerImpl of IController<ContractState> {}
+    impl WalletImpl of IWallet<ContractState> {}
 
     #[generate_trait]
     impl Private of PrivateTrait {

@@ -1,7 +1,7 @@
 // Interfaces
 
 #[starknet::interface]
-trait IAchievement<TContractState> {
+trait IPinner<TContractState> {
     fn pin(self: @TContractState, achievement_id: felt252);
     fn unpin(self: @TContractState, achievement_id: felt252);
 }
@@ -9,7 +9,7 @@ trait IAchievement<TContractState> {
 // Contracts
 
 #[dojo::contract]
-mod Achievement {
+mod Pinner {
     // Dojo imports
 
     use dojo::world::WorldStorage;
@@ -24,7 +24,7 @@ mod Achievement {
 
     // Local imports
 
-    use super::IAchievement;
+    use super::IPinner;
 
     // Components
 
@@ -51,7 +51,7 @@ mod Achievement {
     // Implementations
 
     #[abi(embed_v0)]
-    impl AchievementImpl of IAchievement<ContractState> {
+    impl PinnerImpl of IPinner<ContractState> {
         fn pin(self: @ContractState, achievement_id: felt252) {
             let world: WorldStorage = self.world_storage();
             let caller: felt252 = starknet::get_caller_address().into();
