@@ -48,6 +48,7 @@ mod DeployableComponent {
         fn deploy(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             service: Service,
             project: felt252,
             tier: Tier,
@@ -64,11 +65,10 @@ mod DeployableComponent {
             deployment.assert_does_not_exist();
 
             // [Check] Caller permission
-            let account_id: felt252 = starknet::get_caller_address().into();
             let mut team = store.get_team(project);
             if team.exists() {
                 // [Check] Caller is at least an admin
-                let teammate = store.get_teammate(project, team.time, account_id);
+                let teammate = store.get_teammate(project, team.time, caller_id);
                 teammate.assert_is_allowed(Role::Admin);
                 // [Effect] Increment deployment count
                 team.deploy();
@@ -80,7 +80,7 @@ mod DeployableComponent {
                 team.deploy();
                 store.set_team(@team);
                 // [Effect] Create teammate
-                let teammate = TeammateTrait::new(project, time, account_id, Role::Owner);
+                let teammate = TeammateTrait::new(project, time, caller_id, Role::Owner);
                 store.set_teammate(@teammate);
             }
 
@@ -94,6 +94,7 @@ mod DeployableComponent {
         fn remove(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             service: Service,
             project: felt252,
         ) {
@@ -113,8 +114,7 @@ mod DeployableComponent {
             team.assert_does_exist();
 
             // [Check] Caller is at least admin
-            let account_id: felt252 = starknet::get_caller_address().into();
-            let teammate = store.get_teammate(project, team.time, account_id);
+            let teammate = store.get_teammate(project, team.time, caller_id);
             teammate.assert_is_allowed(Role::Admin);
 
             // [Effect] Delete deployment

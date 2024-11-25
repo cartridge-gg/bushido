@@ -29,6 +29,7 @@ mod GroupableComponent {
         fn add(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             name: felt252,
             account_id: felt252,
             role: Role,
@@ -41,7 +42,6 @@ mod GroupableComponent {
             team.assert_does_exist();
 
             // [Check] Caller is at least admin
-            let caller_id: felt252 = starknet::get_caller_address().into();
             let callermate = store.get_teammate(name, team.time, caller_id);
             callermate.assert_is_allowed(Role::Admin);
 
@@ -57,6 +57,7 @@ mod GroupableComponent {
         fn remove(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             name: felt252,
             account_id: felt252,
         ) {
@@ -68,7 +69,6 @@ mod GroupableComponent {
             team.assert_does_exist();
 
             // [Check] Caller is at least admin
-            let caller_id: felt252 = starknet::get_caller_address().into();
             let callermate = store.get_teammate(name, team.time, caller_id);
             callermate.assert_is_allowed(Role::Admin);
 

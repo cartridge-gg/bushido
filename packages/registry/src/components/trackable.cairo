@@ -30,6 +30,7 @@ mod TrackableComponent {
         fn register(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
@@ -43,7 +44,7 @@ mod TrackableComponent {
             game.assert_does_exist();
 
             // [Check] Caller is owner
-            game.assert_is_owner(starknet::get_caller_address().into());
+            game.assert_is_owner(caller_id);
 
             // [Check] Achievement does not exist
             let achievement = store.get_achievement(world_address, namespace, identifier);
@@ -63,6 +64,7 @@ mod TrackableComponent {
         fn update(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
@@ -76,7 +78,7 @@ mod TrackableComponent {
             game.assert_does_exist();
 
             // [Check] Caller is owner
-            game.assert_is_owner(starknet::get_caller_address().into());
+            game.assert_is_owner(caller_id);
 
             // [Check] Achievement exists
             let mut achievement = store.get_achievement(world_address, namespace, identifier);
@@ -95,6 +97,7 @@ mod TrackableComponent {
         fn publish(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
@@ -107,7 +110,7 @@ mod TrackableComponent {
             game.assert_does_exist();
 
             // [Check] Caller is owner
-            game.assert_is_owner(starknet::get_caller_address().into());
+            game.assert_is_owner(caller_id);
 
             // [Check] Achievement exists
             let mut achievement = store.get_achievement(world_address, namespace, identifier);
@@ -123,6 +126,7 @@ mod TrackableComponent {
         fn hide(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
@@ -135,7 +139,7 @@ mod TrackableComponent {
             game.assert_does_exist();
 
             // [Check] Caller is owner
-            game.assert_is_owner(starknet::get_caller_address().into());
+            game.assert_is_owner(caller_id);
 
             // [Check] Achievement exists
             let mut achievement = store.get_achievement(world_address, namespace, identifier);
@@ -151,6 +155,7 @@ mod TrackableComponent {
         fn whitelist(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
@@ -159,8 +164,7 @@ mod TrackableComponent {
             let mut store: Store = StoreTrait::new(world);
 
             // [Check] Caller is allowed
-            let caller = starknet::get_caller_address().into();
-            let access = store.get_access(caller);
+            let access = store.get_access(caller_id);
             access.assert_is_allowed(Role::Admin);
 
             // [Check] Game exists
@@ -181,6 +185,7 @@ mod TrackableComponent {
         fn blacklist(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
@@ -189,8 +194,7 @@ mod TrackableComponent {
             let mut store: Store = StoreTrait::new(world);
 
             // [Check] Caller is allowed
-            let caller = starknet::get_caller_address().into();
-            let access = store.get_access(caller);
+            let access = store.get_access(caller_id);
             access.assert_is_allowed(Role::Admin);
 
             // [Check] Game exists
@@ -211,6 +215,7 @@ mod TrackableComponent {
         fn remove(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             identifier: felt252,
@@ -221,6 +226,9 @@ mod TrackableComponent {
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
             game.assert_does_exist();
+
+            // [Check] Caller is owner
+            game.assert_is_owner(caller_id);
 
             // [Check] Achievement exists
             let mut achievement = store.get_achievement(world_address, namespace, identifier);

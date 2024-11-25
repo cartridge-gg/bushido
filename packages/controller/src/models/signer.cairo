@@ -77,7 +77,7 @@ mod tests {
     const METHOD: Method = Method::StarknetAccount;
 
     #[test]
-    fn test_deployment_new() {
+    fn test_signer_new() {
         let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, METHOD, "");
         assert_eq!(signer.account_id, ACCOUNT_ID);
         assert_eq!(signer.controller_id, CONTROLLER_ID);
@@ -86,33 +86,33 @@ mod tests {
     }
 
     #[test]
-    fn test_deployment_assert_does_exist() {
+    fn test_signer_assert_does_exist() {
         let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, METHOD, "");
         signer.assert_does_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Signer: already exists')]
-    fn test_deployment_revert_already_exists() {
+    fn test_signer_revert_already_exists() {
         let signer = SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, METHOD, "");
         signer.assert_does_not_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Signer: invalid account id')]
-    fn test_deployment_revert_invalid_account_id() {
+    fn test_signer_revert_invalid_account_id() {
         SignerTrait::new(0, CONTROLLER_ID, METHOD, "");
     }
 
     #[test]
     #[should_panic(expected: 'Signer: invalid controller id')]
-    fn test_deployment_revert_invalid_controller_id() {
+    fn test_signer_revert_invalid_controller_id() {
         SignerTrait::new(ACCOUNT_ID, 0, METHOD, "");
     }
 
     #[test]
     #[should_panic(expected: 'Signer: invalid method')]
-    fn test_deployment_revert_invalid_method() {
+    fn test_signer_revert_invalid_method() {
         SignerTrait::new(ACCOUNT_ID, CONTROLLER_ID, Method::None, "");
     }
 }

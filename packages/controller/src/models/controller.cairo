@@ -96,7 +96,7 @@ mod tests {
     const NETWORK: felt252 = 'NETWORK';
 
     #[test]
-    fn test_deployment_new() {
+    fn test_controller_new() {
         let controller = ControllerTrait::new(
             ACCOUNT_ID, IDENTIFIER, SIGNERS, ADDRESS, NETWORK, ""
         );
@@ -109,7 +109,7 @@ mod tests {
     }
 
     #[test]
-    fn test_deployment_assert_does_exist() {
+    fn test_controller_assert_does_exist() {
         let controller = ControllerTrait::new(
             ACCOUNT_ID, IDENTIFIER, SIGNERS, ADDRESS, NETWORK, ""
         );
@@ -118,7 +118,7 @@ mod tests {
 
     #[test]
     #[should_panic(expected: 'Controller: already exists')]
-    fn test_deployment_revert_already_exists() {
+    fn test_controller_revert_already_exists() {
         let controller = ControllerTrait::new(
             ACCOUNT_ID, IDENTIFIER, SIGNERS, ADDRESS, NETWORK, ""
         );
@@ -127,31 +127,31 @@ mod tests {
 
     #[test]
     #[should_panic(expected: 'Controller: invalid account id')]
-    fn test_deployment_revert_invalid_account_id() {
+    fn test_controller_revert_invalid_account_id() {
         ControllerTrait::new(0, IDENTIFIER, SIGNERS, ADDRESS, NETWORK, "");
     }
 
     #[test]
     #[should_panic(expected: 'Controller: invalid identifier')]
-    fn test_deployment_revert_invalid_identifier() {
+    fn test_controller_revert_invalid_identifier() {
         ControllerTrait::new(ACCOUNT_ID, 0, SIGNERS, ADDRESS, NETWORK, "");
     }
 
     #[test]
     #[should_panic(expected: 'Controller: invalid signers')]
-    fn test_deployment_revert_invalid_signers() {
+    fn test_controller_revert_invalid_signers() {
         ControllerTrait::new(ACCOUNT_ID, IDENTIFIER, 0, ADDRESS, NETWORK, "");
     }
 
     #[test]
     #[should_panic(expected: 'Controller: invalid address')]
-    fn test_deployment_revert_invalid_address() {
+    fn test_controller_revert_invalid_address() {
         ControllerTrait::new(ACCOUNT_ID, IDENTIFIER, SIGNERS, 0, NETWORK, "");
     }
 
     #[test]
     #[should_panic(expected: 'Controller: invalid network')]
-    fn test_deployment_revert_invalid_network() {
+    fn test_controller_revert_invalid_network() {
         ControllerTrait::new(ACCOUNT_ID, IDENTIFIER, SIGNERS, ADDRESS, 0, "");
     }
 }

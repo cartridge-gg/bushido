@@ -56,12 +56,14 @@ mod Slot {
     impl SlotImpl of ISlot<ContractState> {
         fn deploy(self: @ContractState, service: u8, project: felt252, tier: u8,) {
             let world = self.world_storage();
-            self.deployable.deploy(world, service.into(), project, tier.into())
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.deployable.deploy(world, caller, service.into(), project, tier.into())
         }
 
         fn remove(self: @ContractState, service: u8, project: felt252,) {
             let world = self.world_storage();
-            self.deployable.remove(world, service.into(), project);
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.deployable.remove(world, caller, service.into(), project);
         }
     }
 

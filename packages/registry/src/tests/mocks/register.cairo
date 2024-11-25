@@ -103,10 +103,13 @@ pub mod Register {
             youtube: Option<ByteArray>,
             website: Option<ByteArray>,
         ) {
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
             self
                 .registerable
                 .register(
-                    self.world_storage(),
+                    world,
+                    caller,
                     world_address,
                     namespace,
                     project,
@@ -119,7 +122,7 @@ pub mod Register {
                     telegram,
                     twitter,
                     youtube,
-                    website,
+                    website
                 );
         }
 
@@ -138,10 +141,13 @@ pub mod Register {
             youtube: Option<ByteArray>,
             website: Option<ByteArray>,
         ) {
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
             self
                 .registerable
                 .update(
-                    self.world_storage(),
+                    world,
+                    caller,
                     world_address,
                     namespace,
                     color,
@@ -158,19 +164,27 @@ pub mod Register {
         }
 
         fn publish(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.publish(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.publish(world, caller, world_address, namespace);
         }
 
         fn hide(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.hide(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.hide(world, caller, world_address, namespace);
         }
 
         fn whitelist(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.whitelist(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.whitelist(world, caller, world_address, namespace);
         }
 
         fn blacklist(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.blacklist(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.blacklist(world, caller, world_address, namespace);
         }
     }
 

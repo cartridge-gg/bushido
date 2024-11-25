@@ -67,7 +67,7 @@ mod tests {
     const USERNAME: felt252 = 'USERNAME';
 
     #[test]
-    fn test_deployment_new() {
+    fn test_account_new() {
         let account = AccountTrait::new(IDENTIFIER, 0, 'NAME', USERNAME, "{}");
         assert_eq!(account.id, IDENTIFIER);
         assert_eq!(account.controllers, 0);
@@ -78,14 +78,14 @@ mod tests {
     }
 
     #[test]
-    fn test_deployment_assert_does_exist() {
+    fn test_account_assert_does_exist() {
         let account = AccountTrait::new(IDENTIFIER, 0, 'NAME', USERNAME, "{}");
         account.assert_does_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Account: already exists')]
-    fn test_deployment_revert_already_exists() {
+    fn test_account_revert_already_exists() {
         let account = AccountTrait::new(IDENTIFIER, 0, 'NAME', USERNAME, "{}");
         account.assert_does_not_exist();
     }

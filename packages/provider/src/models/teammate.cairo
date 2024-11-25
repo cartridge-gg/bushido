@@ -92,7 +92,7 @@ mod tests {
     const ROLE: Role = Role::Admin;
 
     #[test]
-    fn test_deployment_new() {
+    fn test_teammate_new() {
         let member = TeammateTrait::new(TEAM_ID, TIME, ACCOUNT_ID, ROLE);
         assert_eq!(member.account_id, ACCOUNT_ID);
         assert_eq!(member.team_id, TEAM_ID);
@@ -100,21 +100,21 @@ mod tests {
     }
 
     #[test]
-    fn test_deployment_assert_does_exist() {
+    fn test_teammate_assert_does_exist() {
         let member = TeammateTrait::new(TEAM_ID, TIME, ACCOUNT_ID, ROLE);
         member.assert_does_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Teammate: already exists')]
-    fn test_deployment_revert_already_exists() {
+    fn test_teammate_revert_already_exists() {
         let member = TeammateTrait::new(TEAM_ID, TIME, ACCOUNT_ID, ROLE);
         member.assert_does_not_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Teammate: invalid role')]
-    fn test_deployment_revert_invalid_role() {
+    fn test_teammate_revert_invalid_role() {
         TeammateTrait::new(TEAM_ID, TIME, ACCOUNT_ID, Role::None);
     }
 }

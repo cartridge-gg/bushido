@@ -2,14 +2,23 @@
 version = 1
 
 [[package]]
+name = "achievement"
+version = "0.0.0"
+dependencies = [
+ "dojo",
+]
+
+[[package]]
 name = "arcade"
 version = "0.0.0"
 dependencies = [
+ "achievement",
  "controller",
  "dojo",
  "dojo_cairo_test",
  "provider",
  "registry",
+ "society",
 ]
 
 [[package]]
@@ -52,4 +61,12 @@ name = "registry"
 version = "0.0.0"
 dependencies = [
  "dojo",
+]
+
+[[package]]
+name = "society"
+version = "0.0.0"
+dependencies = [
+ "dojo",
+ "registry",
 ]

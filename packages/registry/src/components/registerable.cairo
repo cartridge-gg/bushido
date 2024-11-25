@@ -31,6 +31,7 @@ mod RegisterableComponent {
         fn register(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             project: felt252,
@@ -55,8 +56,9 @@ mod RegisterableComponent {
             // [Effect] Create game
             let metadata = MetadataTrait::new(color, name, description, image, banner);
             let socials = SocialsTrait::new(discord, telegram, twitter, youtube, website);
-            let owner: felt252 = starknet::get_caller_address().into();
-            let game = GameTrait::new(world_address, namespace, project, metadata, socials, owner);
+            let game = GameTrait::new(
+                world_address, namespace, project, metadata, socials, caller_id
+            );
 
             // [Effect] Store game
             store.set_game(@game);
@@ -65,6 +67,7 @@ mod RegisterableComponent {
         fn update(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
             color: Option<felt252>,
@@ -86,7 +89,7 @@ mod RegisterableComponent {
             game.assert_does_exist();
 
             // [Check] Caller is owner
-            game.assert_is_owner(starknet::get_caller_address().into());
+            game.assert_is_owner(caller_id);
 
             // [Effect] Update game
             let metadata = MetadataTrait::new(color, name, description, image, banner);
@@ -100,6 +103,7 @@ mod RegisterableComponent {
         fn publish(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
         ) {
@@ -111,7 +115,7 @@ mod RegisterableComponent {
             game.assert_does_exist();
 
             // [Check] Caller is owner
-            game.assert_is_owner(starknet::get_caller_address().into());
+            game.assert_is_owner(caller_id);
 
             // [Effect] Publish game
             game.publish();
@@ -123,6 +127,7 @@ mod RegisterableComponent {
         fn hide(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
         ) {
@@ -134,7 +139,7 @@ mod RegisterableComponent {
             game.assert_does_exist();
 
             // [Check] Caller is owner
-            game.assert_is_owner(starknet::get_caller_address().into());
+            game.assert_is_owner(caller_id);
 
             // [Effect] Hide game
             game.hide();
@@ -146,6 +151,7 @@ mod RegisterableComponent {
         fn whitelist(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
         ) {
@@ -153,8 +159,7 @@ mod RegisterableComponent {
             let mut store: Store = StoreTrait::new(world);
 
             // [Check] Caller is allowed
-            let caller = starknet::get_caller_address().into();
-            let access = store.get_access(caller);
+            let access = store.get_access(caller_id);
             access.assert_is_allowed(Role::Admin);
 
             // [Check] Game exists
@@ -171,6 +176,7 @@ mod RegisterableComponent {
         fn blacklist(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
         ) {
@@ -178,8 +184,7 @@ mod RegisterableComponent {
             let mut store: Store = StoreTrait::new(world);
 
             // [Check] Caller is allowed
-            let caller = starknet::get_caller_address().into();
-            let access = store.get_access(caller);
+            let access = store.get_access(caller_id);
             access.assert_is_allowed(Role::Admin);
 
             // [Check] Game exists
@@ -196,6 +201,7 @@ mod RegisterableComponent {
         fn remove(
             self: @ComponentState<TContractState>,
             world: WorldStorage,
+            caller_id: felt252,
             world_address: felt252,
             namespace: felt252,
         ) {
@@ -205,6 +211,9 @@ mod RegisterableComponent {
             // [Check] Game exists
             let mut game = store.get_game(world_address, namespace);
             game.assert_does_exist();
+
+            // [Check] Caller is owner
+            game.assert_is_owner(caller_id);
 
             // [Effect] Remove game
             game.nullify();

@@ -88,7 +88,7 @@ mod tests {
     const TIME: u64 = 1;
 
     #[test]
-    fn test_deployment_new() {
+    fn test_team_new() {
         let team = TeamTrait::new(IDENTIFIER, TIME, NAME, "");
         assert_eq!(team.id, IDENTIFIER);
         assert_eq!(team.time, TIME);
@@ -97,14 +97,14 @@ mod tests {
     }
 
     #[test]
-    fn test_deployment_assert_does_exist() {
+    fn test_team_assert_does_exist() {
         let team = TeamTrait::new(IDENTIFIER, TIME, NAME, "");
         team.assert_does_exist();
     }
 
     #[test]
     #[should_panic(expected: 'Team: already exists')]
-    fn test_deployment_revert_already_exists() {
+    fn test_team_revert_already_exists() {
         let team = TeamTrait::new(IDENTIFIER, TIME, NAME, "");
         team.assert_does_not_exist();
     }

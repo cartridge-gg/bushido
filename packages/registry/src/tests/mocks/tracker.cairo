@@ -83,9 +83,9 @@ pub mod Tracker {
             identifier: felt252,
             karma: u16,
         ) {
-            self
-                .trackable
-                .register(self.world_storage(), world_address, namespace, identifier, karma);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.register(world, caller, world_address, namespace, identifier, karma);
         }
 
         fn update(
@@ -95,33 +95,41 @@ pub mod Tracker {
             identifier: felt252,
             karma: u16,
         ) {
-            self
-                .trackable
-                .update(self.world_storage(), world_address, namespace, identifier, karma);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.update(world, caller, world_address, namespace, identifier, karma);
         }
 
         fn publish(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.publish(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.publish(world, caller, world_address, namespace, identifier);
         }
 
         fn hide(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.hide(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.hide(world, caller, world_address, namespace, identifier);
         }
 
         fn whitelist(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.whitelist(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.whitelist(world, caller, world_address, namespace, identifier);
         }
 
         fn blacklist(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.blacklist(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.blacklist(world, caller, world_address, namespace, identifier);
         }
     }
 

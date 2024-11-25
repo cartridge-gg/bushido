@@ -151,10 +151,13 @@ mod Registry {
             youtube: Option<ByteArray>,
             website: Option<ByteArray>,
         ) {
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
             self
                 .registerable
                 .register(
-                    self.world_storage(),
+                    world,
+                    caller,
                     world_address,
                     namespace,
                     project,
@@ -186,10 +189,13 @@ mod Registry {
             youtube: Option<ByteArray>,
             website: Option<ByteArray>,
         ) {
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
             self
                 .registerable
                 .update(
-                    self.world_storage(),
+                    world,
+                    caller,
                     world_address,
                     namespace,
                     color,
@@ -206,23 +212,33 @@ mod Registry {
         }
 
         fn publish_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.publish(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.publish(world, caller, world_address, namespace);
         }
 
         fn hide_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.hide(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.hide(world, caller, world_address, namespace);
         }
 
         fn whitelist_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.whitelist(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.whitelist(world, caller, world_address, namespace);
         }
 
         fn blacklist_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.blacklist(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.blacklist(world, caller, world_address, namespace);
         }
 
         fn remove_game(self: @ContractState, world_address: felt252, namespace: felt252) {
-            self.registerable.remove(self.world_storage(), world_address, namespace);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.registerable.remove(world, caller, world_address, namespace);
         }
 
         fn register_achievement(
@@ -232,9 +248,9 @@ mod Registry {
             identifier: felt252,
             karma: u16,
         ) {
-            self
-                .trackable
-                .register(self.world_storage(), world_address, namespace, identifier, karma)
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.register(world, caller, world_address, namespace, identifier, karma)
         }
 
         fn update_achievement(
@@ -244,37 +260,49 @@ mod Registry {
             identifier: felt252,
             karma: u16,
         ) {
-            self.trackable.update(self.world_storage(), world_address, namespace, identifier, karma)
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.update(world, caller, world_address, namespace, identifier, karma)
         }
 
         fn publish_achievement(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.publish(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.publish(world, caller, world_address, namespace, identifier);
         }
 
         fn hide_achievement(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.hide(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.hide(world, caller, world_address, namespace, identifier);
         }
 
         fn whitelist_achievement(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.whitelist(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.whitelist(world, caller, world_address, namespace, identifier);
         }
 
         fn blacklist_achievement(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.blacklist(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.blacklist(world, caller, world_address, namespace, identifier);
         }
 
         fn remove_achievement(
             self: @ContractState, world_address: felt252, namespace: felt252, identifier: felt252
         ) {
-            self.trackable.remove(self.world_storage(), world_address, namespace, identifier);
+            let world = self.world_storage();
+            let caller: felt252 = starknet::get_caller_address().into();
+            self.trackable.remove(world, caller, world_address, namespace, identifier);
         }
     }
 
