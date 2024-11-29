@@ -59,6 +59,7 @@ export const Games = () => {
       <Game />
       <Game />
       <Game />
+      <Game />
     </div>
   );
 };
