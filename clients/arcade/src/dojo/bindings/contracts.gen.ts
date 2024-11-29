@@ -1,6 +1,6 @@
 import { DojoProvider } from "@dojoengine/core";
+import { CairoOption } from "starknet";
 import { Account } from "starknet";
-import * as models from "./models.gen";
 
 export async function setupWorld(provider: DojoProvider) {
 
@@ -100,7 +100,7 @@ export async function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const Registry_registerGame = async (snAccount: Account, worldAddress: number, namespace: number, project: number, color: models.Option, name: models.Option, description: models.Option, image: models.Option, banner: models.Option, discord: models.Option, telegram: models.Option, twitter: models.Option, youtube: models.Option, website: models.Option) => {
+	const Registry_registerGame = async (snAccount: Account, worldAddress: number, namespace: number, project: number, color: CairoOption<string>, name: CairoOption<string>, description: CairoOption<string>, image: CairoOption<string>, banner: CairoOption<string>, discord: CairoOption<string>, telegram: CairoOption<string>, twitter: CairoOption<string>, youtube: CairoOption<string>, website: CairoOption<string>) => {
 		try {
 			return await provider.execute(
 				snAccount,
@@ -116,7 +116,7 @@ export async function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const Registry_updateGame = async (snAccount: Account, worldAddress: number, namespace: number, color: models.Option, name: models.Option, description: models.Option, image: models.Option, banner: models.Option, discord: models.Option, telegram: models.Option, twitter: models.Option, youtube: models.Option, website: models.Option) => {
+	const Registry_updateGame = async (snAccount: Account, worldAddress: number, namespace: number, color: CairoOption<string>, name: CairoOption<string>, description: CairoOption<string>, image: CairoOption<string>, banner: CairoOption<string>, discord: CairoOption<string>, telegram: CairoOption<string>, twitter: CairoOption<string>, youtube: CairoOption<string>, website: CairoOption<string>) => {
 		try {
 			return await provider.execute(
 				snAccount,
@@ -356,7 +356,7 @@ export async function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const Society_createAlliance = async (snAccount: Account, color: models.Option, name: models.Option, description: models.Option, image: models.Option, banner: models.Option, discord: models.Option, telegram: models.Option, twitter: models.Option, youtube: models.Option, website: models.Option) => {
+	const Society_createAlliance = async (snAccount: Account, color: CairoOption<string>, name: CairoOption<string>, description: CairoOption<string>, image: CairoOption<string>, banner: CairoOption<string>, discord: CairoOption<string>, telegram: CairoOption<string>, twitter: CairoOption<string>, youtube: CairoOption<string>, website: CairoOption<string>) => {
 		try {
 			return await provider.execute(
 				snAccount,
@@ -500,7 +500,7 @@ export async function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const Society_createGuild = async (snAccount: Account, color: models.Option, name: models.Option, description: models.Option, image: models.Option, banner: models.Option, discord: models.Option, telegram: models.Option, twitter: models.Option, youtube: models.Option, website: models.Option) => {
+	const Society_createGuild = async (snAccount: Account, color: CairoOption<string>, name: CairoOption<string>, description: CairoOption<string>, image: CairoOption<string>, banner: CairoOption<string>, discord: CairoOption<string>, telegram: CairoOption<string>, twitter: CairoOption<string>, youtube: CairoOption<string>, website: CairoOption<string>) => {
 		try {
 			return await provider.execute(
 				snAccount,

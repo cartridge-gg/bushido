@@ -251,7 +251,7 @@ export interface Teammate {
 	role: number;
 }
 
-export interface RegistrySchemaType extends SchemaType {
+export interface Schema extends SchemaType {
 	registry: {
 		Access: Access,
 		AccessValue: AccessValue,
@@ -259,12 +259,35 @@ export interface RegistrySchemaType extends SchemaType {
 		AchievementValue: AchievementValue,
 		GameValue: GameValue,
 		Game: Game,
-		ERC__Balance: ERC__Balance,
-		ERC__Token: ERC__Token,
-		ERC__Transfer: ERC__Transfer,
+	},
+	controller: {
+		AccountValue: AccountValue,
+		Account: Account,
+		Controller: Controller,
+		ControllerValue: ControllerValue,
+		Signer: Signer,
+		SignerValue: SignerValue,
+	},
+	society: {
+		AllianceValue: AllianceValue,
+		Alliance: Alliance,
+		GuildValue: GuildValue,
+		Guild: Guild,
+		Member: Member,
+		MemberValue: MemberValue,
+	},
+	provider: {
+		DeploymentValue: DeploymentValue,
+		Deployment: Deployment,
+		FactoryValue: FactoryValue,
+		Factory: Factory,
+		TeamValue: TeamValue,
+		Team: Team,
+		TeammateValue: TeammateValue,
+		Teammate: Teammate,
 	},
 }
-export const registry: RegistrySchemaType = {
+export const schema: Schema = {
 	registry: {
 		Access: {
 			fieldOrder: ['address', 'role'],
@@ -316,58 +339,7 @@ export const registry: RegistrySchemaType = {
 			socials: "",
 			owner: 0,
 		},
-		ERC__Balance: {
-			fieldOrder: ['balance', 'type', 'tokenmetadata'],
-			balance: '',
-			type: 'ERC20',
-			tokenMetadata: {
-				fieldOrder: ['name', 'symbol', 'tokenId', 'decimals', 'contractAddress'],
-				name: '',
-				symbol: '',
-				tokenId: '',
-				decimals: '',
-				contractAddress: '',
-			},
-		},
-		ERC__Token: {
-			fieldOrder: ['name', 'symbol', 'tokenId', 'decimals', 'contractAddress'],
-			name: '',
-			symbol: '',
-			tokenId: '',
-			decimals: '',
-			contractAddress: '',
-		},
-		ERC__Transfer: {
-			fieldOrder: ['from', 'to', 'amount', 'type', 'executed', 'tokenMetadata'],
-			from: '',
-			to: '',
-			amount: '',
-			type: 'ERC20',
-			executedAt: '',
-			tokenMetadata: {
-				fieldOrder: ['name', 'symbol', 'tokenId', 'decimals', 'contractAddress'],
-				name: '',
-				symbol: '',
-				tokenId: '',
-				decimals: '',
-				contractAddress: '',
-			},
-			transactionHash: '',
-		},
-
 	},
-};
-export interface ControllerSchemaType extends SchemaType {
-	controller: {
-		AccountValue: AccountValue,
-		Account: Account,
-		Controller: Controller,
-		ControllerValue: ControllerValue,
-		Signer: Signer,
-		SignerValue: SignerValue,
-	},
-}
-export const controller: ControllerSchemaType = {
 	controller: {
 		AccountValue: {
 			fieldOrder: ['controllers', 'name', 'username', 'socials', 'credits'],
@@ -415,18 +387,6 @@ export const controller: ControllerSchemaType = {
 			metadata: "",
 		},
 	},
-};
-export interface SocietySchemaType extends SchemaType {
-	society: {
-		AllianceValue: AllianceValue,
-		Alliance: Alliance,
-		GuildValue: GuildValue,
-		Guild: Guild,
-		Member: Member,
-		MemberValue: MemberValue,
-	},
-}
-export const society: SocietySchemaType = {
 	society: {
 		AllianceValue: {
 			fieldOrder: ['open', 'free', 'guild_count', 'metadata', 'socials'],
@@ -482,20 +442,6 @@ export const society: SocietySchemaType = {
 			pending_guild_id: 0,
 		},
 	},
-};
-export interface ProviderSchemaType extends SchemaType {
-	provider: {
-		DeploymentValue: DeploymentValue,
-		Deployment: Deployment,
-		FactoryValue: FactoryValue,
-		Factory: Factory,
-		TeamValue: TeamValue,
-		Team: Team,
-		TeammateValue: TeammateValue,
-		Teammate: Teammate,
-	},
-}
-export const provider: ProviderSchemaType = {
 	provider: {
 		DeploymentValue: {
 			fieldOrder: ['status', 'tier', 'config'],
@@ -550,29 +496,3 @@ export const provider: ProviderSchemaType = {
 		},
 	},
 };
-// Type definition for ERC__Balance struct
-export type ERC__Type = 'ERC20' | 'ERC721';
-export interface ERC__Balance {
-    fieldOrder: string[];
-    balance: string;
-    type: string;
-    tokenMetadata: ERC__Token;
-}
-export interface ERC__Token {
-    fieldOrder: string[];
-    name: string;
-    symbol: string;
-    tokenId: string;
-    decimals: string;
-    contractAddress: string;
-}
-export interface ERC__Transfer {
-    fieldOrder: string[];
-    from: string;
-    to: string;
-    amount: string;
-    type: string;
-    executedAt: string;
-    tokenMetadata: ERC__Token;
-    transactionHash: string;
-}

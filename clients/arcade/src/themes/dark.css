@@ -1,13 +1,14 @@
 @layer base {
   .dark {
+    --solid-fills-spacer: 132 25% 8%; /* solid-fills/spacer */
+
     --background: 135 15% 10%; /* bg.background */
     --foreground: 0 0% 100%; /* text.primary */
 
-    --popover: 135 15% 10%; /* bg.background */
-    --popover-foreground: 0 0% 100%; /* text.primary */
+    --primary: 135 12% 13%; /* bg.primary */
 
-    --primary: 44 96% 61%; /* brand.primary */
-    --primary-foreground: 135 15% 10%; /* bg.primary */
+    --brand-primary: 44 96% 61%; /* brand.primary */
+    --brand-primary-foreground: 135 15% 10%; /* bg.primary */
 
     --secondary: 135 12% 13%; /* bg.primary */
     --secondary-foreground: 0 0% 100%; /* text.primary */

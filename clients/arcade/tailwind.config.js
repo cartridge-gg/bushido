@@ -27,6 +27,7 @@ module.exports = {
             colors: {
                 "beast-red": "#EC2B00",
                 "beast-purple": "#9747FF",
+                spacer: "hsl(var(--solid-fills-spacer))",
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",
